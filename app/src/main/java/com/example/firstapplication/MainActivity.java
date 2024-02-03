@@ -18,9 +18,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class MainActivity extends AppCompatActivity {
     private WebView mapView;
 
+    //! Bu class Android ile Webview arasinda bağlantının sağlandığı yer.
     public static class WebAppInterface {
         Context mContext;
         WebAppInterface(Context c) {
@@ -32,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +42,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mapView = (WebView) findViewById(R.id.mapview);
-        Button buttonTriggerJS = findViewById(R.id.mButton);
+        FloatingActionButton buttonTriggerJS = findViewById(R.id.mButton);
 
         mapView.getSettings().setJavaScriptEnabled(true);
         mapView.getSettings().setDomStorageEnabled(true);
         mapView.loadUrl("file:///android_asset/leafletJS/map.html");
 
+
+
         mapView.addJavascriptInterface(new WebAppInterface(this), "Android");
+
+
 
         mapView.setWebViewClient(new WebViewClient() {
             @Override
