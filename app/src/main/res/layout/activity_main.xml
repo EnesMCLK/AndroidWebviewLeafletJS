@@ -8,12 +8,15 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
+
         <WebView
             android:id="@+id/mapview"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
         </WebView>
     </RelativeLayout>
 
@@ -29,9 +32,10 @@
         android:clickable="true"
         android:foregroundGravity="bottom|right"
         app:srcCompat="@drawable/navigation"
+        android:backgroundTint="@color/white"
+        android:tintMode="multiply"
         android:focusable="true"
-        android:importantForAccessibility="no" />
-
+        android:contentDescription="@string/todo" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

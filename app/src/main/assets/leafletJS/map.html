@@ -20,46 +20,64 @@
             width: 100vw;
         }
      </style>
-
-</head>
-<body>
-<div id="map"></div>
-<script type="text/javascript">
-        var map = L.map('map').setView([40.7, 29.9], 10);
-
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 20,
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
-
-		L.marker([40.82,29.92]).addTo(map)
-    		.bindPopup('Burası Kocaeli Üniversitesi.')
-    		.openPopup();
-
-        var popup = L.popup()
-            .setLatLng([51.5, -0.09])
-            .setContent("Merhaba")
-            .openOn(map);
-
-        // Webview içerisinden Android'e veri gönderme ve Android fonksiyonunu çalıştırma.
-        popup._container.addEventListener('click', content);
-        function content() {
-            Android.showToast("Popup clicked!");
-        }
-
-
-        // Android komutu ile Webview'i kontrol etme ve Javascript fonksiyonunu çalıştırma.
+    <script type="text/javascript">
         var hedef = [40.8207,29.9213];
         var animasyon = {
             duration: 3,            // Animasyon süresi (saniye cinsinden)
             easeLinearity: 0.25     // Hareketin hızı
         };
 
+        var popupp = L.popup()
+                    .setContent("Burası Kocaeli Üniversitesi");
+
+    </script>
+
+</head>
+<body>
+<div id="map"></div>
+<script type="text/javascript">
+    
+        var map = L.map('map').setView([40.7, 29.9], 10);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 20,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        var marker = L.marker([40.82,29.92]).addTo(map)
+    		.bindPopup(popupp)
+    		.openPopup();
+
+
+        // Webview içerisinden Android'e veri gönderme ve Android fonksiyonunu çalıştırma.
+        popupp._container.addEventListener('click', popupclicked);
+
+        marker.on('click', function() {
+        // Popup içeriğini belirleme
+        var popupContent = "<p>Marker'a tıklandı!</p>";
+
+        // Popup oluşturma ve haritaya ekleme
+        var popup = L.popup()
+            .setLatLng(marker.getLatLng())
+            .setContent(popupContent)
+            .openOn(map);
+
+        // Android'e tıklama mesajı gönderme
+        window.Android.popupClicked();
+        });
+        marker._container.addEventListener('click', markerclicked);
+
+        function popupclicked() {
+            Android.showToast("Popup'a tıklandı");
+        };
+        function markerclicked() {
+            Android.showToast("Marker'a tıklandı");
+        };
+
+        // Android komutu ile Webview'i kontrol etme ve Javascript fonksiyonunu çalıştırma.
         function ucus() {
             map.flyTo(hedef,15,animasyon);
         }
 
     </script>
-
 </body>
 </html>
