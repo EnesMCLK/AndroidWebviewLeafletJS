@@ -23,7 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 @SuppressLint("SetJavaScriptEnabled")
 public class MainActivity extends AppCompatActivity {
-    private WebView mapView;
+    protected WebView mapView;
 
     //! Bu class Android ile Webview arasinda bağlantının sağlandığı yer.
     public static class WebAppInterface {
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
         }
     }
+
 
     protected void cmapView (WebView mapView, FloatingActionButton buttonTriggerJS){
 
@@ -54,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
                     // Burada Popup tıklandığında yapılacak işlemleri gerçekleştirin
                     Toast.makeText(getApplicationContext(), "Popup'a tıklandı'", Toast.LENGTH_SHORT).show();
                     return true;
-                } else if (url.toString().startsWith("markerclicked://")) {
+                }
+                if (url.toString().startsWith("markerclicked://")) {
                     // Marker tıklandığında yapılacak işlemleri gerçekleştirin
                     Toast.makeText(getApplicationContext(), "Marker'a tıklandı", Toast.LENGTH_SHORT).show();
                     return true;

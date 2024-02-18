@@ -50,28 +50,18 @@
 
         // Webview içerisinden Android'e veri gönderme ve Android fonksiyonunu çalıştırma.
         popupp._container.addEventListener('click', popupclicked);
-
-        marker.on('click', function() {
-        // Popup içeriğini belirleme
-        var popupContent = "<p>Marker'a tıklandı!</p>";
-
-        // Popup oluşturma ve haritaya ekleme
-        var popup = L.popup()
-            .setLatLng(marker.getLatLng())
-            .setContent(popupContent)
-            .openOn(map);
-
-        // Android'e tıklama mesajı gönderme
-        window.Android.popupClicked();
-        });
-        marker._container.addEventListener('click', markerclicked);
-
         function popupclicked() {
             Android.showToast("Popup'a tıklandı");
         };
+
         function markerclicked() {
             Android.showToast("Marker'a tıklandı");
         };
+        marker.on('click', function() {
+            // Android'e tıklama mesajı gönderme
+            markerclicked();
+        });
+
 
         // Android komutu ile Webview'i kontrol etme ve Javascript fonksiyonunu çalıştırma.
         function ucus() {
