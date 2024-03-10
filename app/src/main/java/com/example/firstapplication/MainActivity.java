@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         mapView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
-
         mapView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
