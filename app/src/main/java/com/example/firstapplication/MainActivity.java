@@ -1,22 +1,14 @@
 package com.example.firstapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.JavascriptInterface;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,17 +18,19 @@ public class MainActivity extends AppCompatActivity {
     protected WebView mapView;
 
     //! Bu class Android ile Webview arasinda bağlantının sağlandığı yer.
-    public static class WebAppInterface {
+    @SuppressLint("SetJavaScriptEnabled")
+    public class WebAppInterface {
         Context mContext;
         WebAppInterface(Context c) {
             mContext = c;
         }
         @JavascriptInterface
-        public void showToast(String toast) {
-            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+        public void markerclicked() {
+            Log.e("WebAppInterface","markerclicked");
+            // JavaScript tarafından gönderilen tıklama mesajını yakala ve bir toast mesajı olarak göster
+            runOnUiThread(() -> Toast.makeText(mContext, "Marker'a tıklandı!", Toast.LENGTH_SHORT).show());
         }
     }
-
 
     protected void cmapView (WebView mapView, FloatingActionButton buttonTriggerJS){
 
@@ -50,17 +44,6 @@ public class MainActivity extends AppCompatActivity {
         mapView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                Uri url = request.getUrl();
-                if (url.toString().startsWith("popupclicked://")) {
-                    // Burada Popup tıklandığında yapılacak işlemleri gerçekleştirin
-                    Toast.makeText(getApplicationContext(), "Popup'a tıklandı'", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                if (url.toString().startsWith("markerclicked://")) {
-                    // Marker tıklandığında yapılacak işlemleri gerçekleştirin
-                    Toast.makeText(getApplicationContext(), "Marker'a tıklandı", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
                 return super.shouldOverrideUrlLoading(view, request);
             }
         });
@@ -77,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mapView = (WebView) findViewById(R.id.mapview);
+        mapView = findViewById(R.id.mapview);
         FloatingActionButton buttonTriggerJS = findViewById(R.id.mButton);
 
         cmapView(mapView,buttonTriggerJS);
