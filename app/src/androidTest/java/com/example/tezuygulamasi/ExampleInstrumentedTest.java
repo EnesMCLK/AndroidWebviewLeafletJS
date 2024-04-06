@@ -1,4 +1,4 @@
-package com.example.firstapplication;
+package com.example.tezuygulamasi;
 
 import android.content.Context;
 

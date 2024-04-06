@@ -3,13 +3,14 @@ plugins {
 }
 
 android {
-    namespace 'com.example.firstapplication'
+    namespace 'com.example.tezuygulamasi'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.firstapplication"
-        minSdk 24
-        targetSdk 33
+        applicationId 'com.example.tezuygulamasi'
+        minSdk 27
+        //noinspection ExpiredTargetSdkVersion
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -29,7 +30,7 @@ android {
 }
 
 dependencies {
-    implementation "androidx.core:core-splashscreen:1.0.0"
+    implementation "androidx.core:core-splashscreen:1.0.1"
     implementation "androidx.webkit:webkit:1.10.0"
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'

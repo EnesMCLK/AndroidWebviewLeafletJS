@@ -1,16 +1,13 @@
-package com.example.firstapplication;
+package com.example.tezuygulamasi;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -31,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(() -> Toast.makeText(mContext, "Marker'a tıklandı!", Toast.LENGTH_SHORT).show());
         }
     }
-
     protected void cmapView (WebView mapView, FloatingActionButton buttonTriggerJS){
 
         mapView.getSettings().setJavaScriptEnabled(true);
@@ -40,19 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
         mapView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
-        mapView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                return super.shouldOverrideUrlLoading(view, request);
-            }
-        });
-
-        buttonTriggerJS.setOnClickListener(v -> {
-            // JavaScript'i tetiklemek için evaluateJavascript() kullanılır.
-            mapView.evaluateJavascript("javascript:ucus();", null);
-        });
+        buttonTriggerJS.setOnClickListener(v -> mapView.evaluateJavascript("javascript:ucus();", null));
     }
-
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +49,21 @@ public class MainActivity extends AppCompatActivity {
 
         cmapView(mapView,buttonTriggerJS);
 
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        // Veritabanını hafızaya kopyala.
+        try {
+            dbHelper.copyDatabase();
+            Log.e("DATABASE","Veritabanı kopyalandı.");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
+        // Veritabanından sorgu çalıştır.
+        try {
+            String Data = dbHelper.getData();
+            Toast.makeText(this, Data, Toast.LENGTH_LONG).show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

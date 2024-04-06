@@ -1,4 +1,4 @@
-package com.example.firstapplication;
+package com.example.tezuygulamasi;
 
 import org.junit.Test;
 
