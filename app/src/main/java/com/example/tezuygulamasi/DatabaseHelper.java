@@ -1,6 +1,7 @@
 package com.example.tezuygulamasi;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -56,9 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public String getData() {
-        /*
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = db.rawQuery("SELECT * FROM "+ DATABASE_TABLE_MARKER + " WHERE SiraNo = '1425'", null);
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -75,9 +74,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return stringBuilder.toString();
-
-         */
-        return null;
     }
 
 

@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/tez_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FirstApplication"
+        android:theme="@style/Theme.TezUygulamasi"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
