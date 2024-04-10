@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     protected BottomSheetDialog dialog;
     protected BottomSheet bottomSheet;
     protected View view;
-    // protected createDialog createDialog;
 
 
     //! Bu class Android ile Webview arasinda bağlantının sağlandığı yer.
