@@ -1,4 +1,8 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">TEsarZ</string>
     <string name="todo">TODO</string>
+    <string name="baslik">İstasyon Adı</string>
+    <string name="marka">Marka</string>
+    <string name="adres" tools:ignore="Typos">Adres</string>
+    <string name="rotaOlustur">Rota Oluştur</string>
 </resources>

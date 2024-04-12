@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected BottomSheetDialog dialog;
     protected BottomSheet bottomSheet;
     protected View view;
+    public DatabaseHelper data;
 
 
     //! Bu class Android ile Webview arasinda bağlantının sağlandığı yer.
@@ -36,25 +37,16 @@ public class MainActivity extends AppCompatActivity {
         WebAppInterface(Context context, Dialog dialog) {
             mContext = context;
             mdialog = dialog;
-            mbsTextView = findViewById(R.id.mbsTextView);
         }
 
         @JavascriptInterface
         public void markerClicked(String siraNo) {
             this.siraNo = siraNo;
             this.siraNo = getMarkerClicked();
-
-            Log.e("markerClicked", "markerClicked: " + siraNo);
-            // bsTextView.setText(dbHelper.getData(String.valueOf(sira),2));
-            Log.e("WebAppInterface","bsTextView.String.valueOf("+siraNo+"));");
-
         }
         public String getMarkerClicked(){
-            Log.e("getMarkerClicked","this."+this.siraNo);
-
             bottomSheet = BottomSheet.newInstance(siraNo);
             bottomSheet.show(getSupportFragmentManager(), "BottomSheetDialogFragment");
-
             return this.siraNo;
         }
     }
@@ -64,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             databaseHelper.copyDatabase();
             Log.e("DATABASE","Veritabanı kopyalandı.");
+
         }catch (Exception e){
             e.printStackTrace();
             Log.e("DATABASE","Veritabanırken hata oluştu.");
@@ -74,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         mapView.getSettings().setJavaScriptEnabled(true);
         mapView.getSettings().setDomStorageEnabled(true);
         mapView.loadUrl("file:///android_asset/leafletJS/map.html");
-
         buttonTriggerJS.setOnClickListener(v -> mapView.evaluateJavascript("javascript:ucus();", null));
     }
 
@@ -86,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
         mapView = findViewById(R.id.mapview);
         buttonTriggerJS = findViewById(R.id.mButton);
-        dialog = new BottomSheetDialog(this);
-
         cmapView(mapView,buttonTriggerJS);
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
