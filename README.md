@@ -1,1 +1,1 @@
-https://enesmclk.github.io/AndroidWebviewLeafletJS/
+https://enesmclk.github.io/AndroidWebviewLeafletJS/leafletJS
