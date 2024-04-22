@@ -1,3 +1,9 @@
+var map = L.map('map').setView([40.7, 29.9], 10);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 20,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
 var marker_1425 = L.marker([40.199969, 25.91764]).addTo(map).on('click',function(e){Android.markerclicked();});
 var marker_1382 = L.marker([40.222927, 26]).addTo(map).on('click',function(e){Android.markerclicked();});
 var marker_1407 = L.marker([40.131231, 26]).addTo(map).on('click',function(e){Android.markerclicked();});
