@@ -194,17 +194,11 @@
             markers.forEach(function(marker) {
                 var markerLatLng = marker.getLatLng();
                 var distance = markerLatLng.distanceTo(clickedLatLng);
-                console.log(markerLatLng);
-                console.log(distance);
 
                 if (distance < closestDistance) {
                     closestDistance = distance;
                     closestMarker = marker;
                 }
-
-                console.log('--------------------------------------')
-                console.log(closestMarker.latlng);
-                console.log(closestDistance);
             });
             return closestMarker;
         }
