@@ -4,15 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>MobilWeb</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossorigin=""/>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.0/dist//leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.3.0/dist/leaflet.js" ></script>
     <script src="https://unpkg.com/leaflet-providers@latest/leaflet-providers.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
+
+
     <style>
         body {
             padding: 0;
@@ -34,16 +39,68 @@
 <body>
 <div id="map"></div>
     <script type="text/javascript">
-        var map = L.map('map').setView([40.7, 29.9], 10);
         var startDest;
         var markers = [];
         var userLocation;
+        var closestMarker;
+        var map = L.map('map').setView([40.7, 29.9], 10);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
+            maxZoom: 20,
             attribution: '© OpenStreetMap'
         }).addTo(map);
-
+        
         marker();
+
+        // MarkerClusterGroup nesnesi
+        var markersCluster = L.markerClusterGroup();
+
+        // Haritaya tıklama eylemi
+        map.on('click', function(e) {
+            var container = L.DomUtil.create('div'),
+            findBtn = createButton('En yakın istasyonu bul', container);
+            findBtn.addEventListener("click", function() {   
+                // En yakın istasyonu bulma
+                var closestMarker = findClosestMarker(userLocation, markers);
+                console.log('Buttona tıklandı');
+                if (closestMarker) {
+                    changeMarkerColor(closestMarker,'red');
+                    console.log('Renk değiştirildi '+closestMarker._latlng)
+                }
+            });
+            L.popup()
+                .setContent(container)
+                .setLatLng(e.latlng)
+                .openOn(map);
+        });
+
+        // Markera tıklama eylemi
+        function onMarkerClick(e) {        
+            var latlng = e.latlng;
+
+            var panel = L.Routing.control({
+                waypoints: [
+                    startDest,
+                    latlng
+                ],
+                router: new L.Routing.osrmv1({
+                    serviceUrl: `https://router.project-osrm.org/route/v1`,
+                    language: 'tr'
+                }),
+                routeWhileDragging: true,
+                showAlternatives: true,
+                collapsible: true,
+                collapsed: true
+            }).addTo(map);
+            panel.hide();
+        }
+
+        // Dizideki her markerı MarkerClusterGroup'a ekle
+        function markerCluster(){
+            markers.forEach(function(marker) {
+                markersCluster.addLayer(marker);
+            });
+            map.addLayer(markersCluster);
+        }
 
         // Android'e tıklama mesajı gönderme
         var marker_1 = L.marker([40.82,29.92]).addTo(map).on('click',function(e){onMarkerClick(e)});
@@ -53,110 +110,8 @@
         function ucus() {
             map.flyTo(hedef,15,animasyon);
         }
-
-        function marker(){
-            var marker_1425 = L.marker([40.199969, 25.91764]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_1425);
-            var marker_1382 = L.marker([40.222927, 26]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_1382);
-            var marker_1407 = L.marker([40.131231, 26]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_1407);
-            var marker_1407 = L.marker([40.131231, 26]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_1407);
-            var marker_687 = L.marker([40.178338, 26.352381]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_687);
-            var marker_666 = L.marker([40.265433, 26.382735]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_666);
-            var marker_3821 = L.marker([40.397938, 26.614998]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3821);
-            var marker_3821 = L.marker([40.397938, 26.614998]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3821);
-            var marker_2875 = L.marker([40.39985, 26.61512]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2875);
-            var marker_2875 = L.marker([40.39985, 26.61512]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2875);
-            var marker_3820 = L.marker([40.399563, 26.617138]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3820);
-            var marker_3820 = L.marker([40.399563, 26.617138]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3820);
-            var marker_2716 = L.marker([40.40004, 26.61746]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2716);
-            var marker_2716 = L.marker([40.40004, 26.61746]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2716);
-            var marker_3794 = L.marker([40.4135, 26.67878]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3794);
-            var marker_3794 = L.marker([40.4135, 26.67878]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3794);
-            var marker_1003 = L.marker([40.618174, 27.09923]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_1003);
-            var marker_3823 = L.marker([40.602253, 26.904741]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3823);
-            var marker_3823 = L.marker([40.602253, 26.904741]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3823);
-            var marker_2704 = L.marker([40.603049, 26.90221]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2704);
-            var marker_2704 = L.marker([40.603049, 26.90221]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2704);
-            var marker_2703 = L.marker([40.603283, 26.902912]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2703);
-            var marker_2703 = L.marker([40.603283, 26.902912]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2703);
-            var marker_3822 = L.marker([40.603283, 26.902912]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3822);
-            var marker_3822 = L.marker([40.603283, 26.902912]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3822);
-            var marker_1000 = L.marker([40.653905, 27.055097]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_1000);
-            var marker_1000 = L.marker([40.653905, 27.055097]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_1000);
-            var marker_689 = L.marker([40.64003, 26.85901]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_689);
-            var marker_689 = L.marker([40.64003, 26.85901]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_689);
-            var marker_2565 = L.marker([40.810287, 27.035573]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2565);
-            var marker_2565 = L.marker([40.810287, 27.035573]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2565);
-            var marker_2566 = L.marker([40.811766, 27.038673]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2566);
-            var marker_2566 = L.marker([40.811766, 27.038673]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2566);
-            var marker_4804 = L.marker([40.81277, 27.038712]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_4804);
-            var marker_4804 = L.marker([40.81277, 27.038712]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_4804);
-            var marker_4801 = L.marker([40.810743, 27.035811]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_4801);
-            var marker_4801 = L.marker([40.810743, 27.035811]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_4801);
-            var marker_3999 = L.marker([40.872889, 26.993778]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3999);
-            var marker_1955 = L.marker([40.891754, 26.909647]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_1955);
-            var marker_2657 = L.marker([40.884318, 26.893084]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2657);
-            var marker_2657 = L.marker([40.884318, 26.893084]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2657);
-            var marker_2321 = L.marker([40.88276, 26.88638]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2321);
-            var marker_2322 = L.marker([40.88125, 26.88627]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2322);
-            var marker_2680 = L.marker([40.873413, 26.689355]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2680);
-            var marker_2680 = L.marker([40.873413, 26.689355]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2680);
-            var marker_2584 = L.marker([40.874875, 26.662796]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2584);
-            var marker_2584 = L.marker([40.874875, 26.662796]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_2584);
-            var marker_3789 = L.marker([40.875047, 26.64221]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3789);
-            var marker_3789 = L.marker([40.875047, 26.64221]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3789);
-            var marker_3789 = L.marker([40.875047, 26.64221]).addTo(map).on('click',function(e){onMarkerClick(e);});
-            markers.push(marker_3789);
-        }
         
+        // Geolocation(Konum) Metodu
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(function(position) {
             userLocation = [position.coords.latitude, position.coords.longitude];
@@ -172,19 +127,7 @@
             alert('Tarayıcında Geolocation desteklenmiyor.');
         }
 
-        function onMarkerClick(e) {        
-            var latlng = e.latlng;
-
-            L.Routing.control({
-                waypoints: [
-                    startDest,
-                    latlng
-                ]
-            }).addTo(map);
-        }
-
-        
-
+        // En yakın Marker bulucu
         function findClosestMarker(clickedLatLng, markers) {
             var closestMarker = null;
             var closestDistance = Infinity;
@@ -192,15 +135,16 @@
             markers.forEach(function(marker) {
                 var markerLatLng = marker.getLatLng();
                 var distance = markerLatLng.distanceTo(clickedLatLng);
-
                 if (distance < closestDistance) {
                     closestDistance = distance;
                     closestMarker = marker;
                 }
+                console.log(closestMarker);
             });
             return closestMarker;
         }
 
+        // EnlemBoylam verisi ile markerın verisi degistirme
         function addToMarkerAtLocation(latlng) {
             markers.forEach(function(marker) {
                 if (marker.getLatLng().equals(latlng)) {
@@ -209,6 +153,7 @@
             });
         }
 
+        // Button olusturma fonksiyonu
         function createButton(label, container) {
             var btn = L.DomUtil.create('button', '', container);
             btn.setAttribute('type', 'button');
@@ -216,36 +161,242 @@
             return btn;
         }
 
-        map.on('click', function(e) {
-            var container = L.DomUtil.create('div'),
-            startBtn = createButton('En yakın istasyonu bul', container);
-            startBtn.addEventListener("click", function() {   
-                // En yakın istasyonu bulma
-                var closestMarker = findClosestMarker(startDest, markers);
-                if (closestMarker) {
-                    changeMarkerColor(closestMarker,'red');
-                }
-            });
-            L.popup()
-                .setContent(container)
-                .setLatLng(e.latlng)
-                .openOn(map);
-
-  
-        });
-
+        // Marker rengini degistirme
         function changeMarkerColor(marker, color) {
             var newIcon = new L.Icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-' + color +'.png',
                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                 iconSize: [25, 41],
-                iconAnchor: [12, 41],
-                popupAnchor: [1, -34]
+                iconAnchor: [12, 41]
             });
             marker.setIcon(newIcon);
         }
 
+        // Markerların bulunduğu fonksiyon
+        function marker(){
+            var marker_4442 = L.marker([40.7192950,29.7825690]);
+            marker_4442.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4442);
+            var marker_2350 = L.marker([40.6396700,29.9382000]);
+            marker_2350.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2350);
+            var marker_4957 = L.marker([40.6756240,29.9632200]);
+            marker_4957.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4957);
+            var marker_5262 = L.marker([40.7059170,29.8722220]);
+            marker_5262.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5262);
+            var marker_140 = L.marker([40.7147320,29.9191210]);
+            marker_140.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_140);
+            var marker_995 = L.marker([40.7161210,29.9220210]);
+            marker_995.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_995);
+            var marker_713 = L.marker([40.7153850,29.9232520]);
+            marker_713.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_713);
+            var marker_2285 = L.marker([40.7123860,30.0160740]);
+            marker_2285.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2285);
+            var marker_2137 = L.marker([40.7289550,29.9819910]);
+            marker_2137.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2137);
+            var marker_4956 = L.marker([40.7249330,29.9543290]);
+            marker_4956.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4956);
+            var marker_1495 = L.marker([40.7248500,29.9876900]);
+            marker_1495.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_1495);
+            var marker_3117 = L.marker([40.7311280,29.9815470]);
+            marker_3117.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3117);
+            var marker_1818 = L.marker([40.7382400,29.9949500]);
+            marker_1818.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_1818);
+            var marker_5570 = L.marker([40.7438210,29.9439540]);
+            marker_5570.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5570);
+            var marker_3849 = L.marker([40.7445110,29.9497100]);
+            marker_3849.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3849);
+            var marker_1462 = L.marker([40.7469390,29.9447230]);
+            marker_1462.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_1462);
+            var marker_3928 = L.marker([40.7481150,29.9577620]);
+            marker_3928.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3928);
+            var marker_3050 = L.marker([40.7501180,29.9638600]);
+            marker_3050.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3050);
+            var marker_695 = L.marker([40.7521930,29.9606860]);
+            marker_695.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_695);
+            var marker_3119 = L.marker([40.7538560,29.9555340]);
+            marker_3119.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3119);
+            var marker_156 = L.marker([40.7537000,29.9614000]);
+            marker_156.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_156);
+            var marker_5744 = L.marker([40.7546000,29.9633000]);
+            marker_5744.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5744);
+            var marker_3262 = L.marker([40.7552170,29.9484950]);
+            marker_3262.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3262);
+            var marker_4615 = L.marker([40.7570010,29.9476120]);
+            marker_4615.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4615);
+            var marker_4443 = L.marker([40.7574430,29.9432440]);
+            marker_4443.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4443);
+            var marker_3776 = L.marker([40.7583990,29.9784060]);
+            marker_3776.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3776);
+            var marker_711 = L.marker([40.7580050,29.9799320]);
+            marker_711.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_711);
+            var marker_4280 = L.marker([40.7601110,29.9746670]);
+            marker_4280.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4280);
+            var marker_2621 = L.marker([40.7603580,29.9729740]);
+            marker_2621.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2621);
+            var marker_1464 = L.marker([40.7642990,29.9671800]);
+            marker_1464.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_1464);
+            var marker_4963 = L.marker([40.7617820,29.9612560]);
+            marker_4963.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4963);
+            var marker_5798 = L.marker([40.7628520,29.9577910]);
+            marker_5798.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5798);
+            var marker_1149 = L.marker([40.7572970,29.9945500]);
+            marker_1149.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_1149);
+            var marker_998 = L.marker([40.7536760,30.0025570]);
+            marker_998.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_998);
+            var marker_4977 = L.marker([40.7644300,29.9455510]);
+            marker_4977.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4977);
+            var marker_5288 = L.marker([40.7655800,29.9431400]);
+            marker_5288.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5288);
+            var marker_994 = L.marker([40.7640890,29.9392150]);
+            marker_994.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_994);
+            var marker_5523 = L.marker([40.7610700,29.9340300]);
+            marker_5523.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5523);
+            var marker_2307 = L.marker([40.7600810,29.9286120]);
+            marker_2307.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2307);
+            var marker_2262 = L.marker([40.7663960,29.9763670]);
+            marker_2262.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2262);
+            var marker_1301 = L.marker([40.7706600,29.9698100]);
+            marker_1301.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_1301);
+            var marker_2353 = L.marker([40.7780680,29.9690040]);
+            marker_2353.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2353);
+            var marker_3545 = L.marker([40.7802010,29.9729000]);
+            marker_3545.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3545);
+            var marker_4035 = L.marker([40.7966900,29.9917710]);
+            marker_4035.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4035);
+            var marker_2492 = L.marker([40.7950910,29.9681710]);
+            marker_2492.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2492);
+            var marker_5921 = L.marker([40.7767000,29.9058000]);
+            marker_5921.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5921);
+            var marker_2501 = L.marker([40.7743430,29.8735540]);
+            marker_2501.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2501);
+            var marker_1623 = L.marker([40.7586980,29.8495330]);
+            marker_1623.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_1623);
+            var marker_701 = L.marker([40.7575980,29.8507410]);
+            marker_701.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_701);
+            var marker_1493 = L.marker([40.7712100,29.8066900]);
+            marker_1493.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_1493);
+            var marker_5525 = L.marker([40.7710630,29.7978000]);
+            marker_5525.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5525);
+            var marker_5496 = L.marker([40.7760000,29.7987000]);
+            marker_5496.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5496);
+            var marker_2927 = L.marker([40.7955090,30.0803520]);
+            marker_2927.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2927);
+            var marker_2926 = L.marker([40.7949240,30.0755260]);
+            marker_2926.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2926);
+            var marker_3455 = L.marker([40.7958530,30.0765170]);
+            marker_3455.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3455);
+            var marker_3454 = L.marker([40.7944120,30.0757510]);
+            marker_3454.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3454);
+            var marker_2456 = L.marker([40.7950360,30.0750420]);
+            marker_2456.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2456);
+            var marker_706 = L.marker([40.7574270,30.0230120]);
+            marker_706.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_706);
+            var marker_705 = L.marker([40.7349510,30.0294340]);
+            marker_705.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_705);
+            var marker_2355 = L.marker([40.7471670,30.0331660]);
+            marker_2355.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2355);
+            var marker_4953 = L.marker([40.7490470,30.0415740]);
+            marker_4953.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4953);
+            var marker_1300 = L.marker([40.7547580,30.0505240]);
+            marker_1300.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_1300);
+            var marker_3775 = L.marker([40.7470730,30.0622740]);
+            marker_3775.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3775);
+            var marker_5971 = L.marker([40.7274310,30.0690310]);
+            marker_5971.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5971);
+            var marker_3771 = L.marker([40.7275700,30.0682600]);
+            marker_3771.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3771);
+            var marker_3770 = L.marker([40.7280730,30.0720370]);
+            marker_3770.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3770);
+            var marker_5970 = L.marker([40.7279310,30.0714610]);
+            marker_5970.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_5970);
+            var marker_157 = L.marker([40.7237000,30.1025000]);
+            marker_157.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_157);
+            var marker_3993 = L.marker([40.7367780,30.1109720]);
+            marker_3993.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3993);
+            var marker_4104 = L.marker([40.6792730,30.1387900]);
+            marker_4104.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4104);
+            var marker_3932 = L.marker([40.6538890,30.0966390]);
+            marker_3932.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_3932);
+            var marker_4342 = L.marker([40.6947450,30.1288040]);
+            marker_4342.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_4342);
+            var marker_2356 = L.marker([40.7001000,30.1351000]);
+            marker_2356.on('click',function(e){onMarkerClick(e)});
+            markers.push(marker_2356);
 
+        }
+        
+        markerCluster();
 
     </script>
 </body>
