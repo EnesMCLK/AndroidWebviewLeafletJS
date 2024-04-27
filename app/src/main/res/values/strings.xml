@@ -5,4 +5,5 @@
     <string name="marka">Marka</string>
     <string name="adres" tools:ignore="Typos">Adres</string>
     <string name="rotaOlustur">Rota Oluştur</string>
+    <string name="route">Yol Tarifi</string>
 </resources>

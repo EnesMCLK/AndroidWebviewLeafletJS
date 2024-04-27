@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,9 +18,10 @@ import java.util.List;
 public class BottomSheet extends BottomSheetDialogFragment {
 
     protected View view;
-    private String mSiraNo;
     private List<String> mData,mBaslik,mMarka;
+    private String mSiraNo;
     private TextView baslik,marka;
+    private Button btnRoute;
     private DatabaseHelper dbhelper;
 
     public static BottomSheet newInstance(String data) {
@@ -70,6 +72,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         view = view.findViewById(R.id.modalBottomSheetContainer);
         baslik = view.findViewById(R.id.baslik);
         marka = view.findViewById(R.id.marka);
+        btnRoute = view.findViewById(R.id.btnRoute);
 
         try {
             Log.e("DATABASE","onViewCreated: "+data(3));

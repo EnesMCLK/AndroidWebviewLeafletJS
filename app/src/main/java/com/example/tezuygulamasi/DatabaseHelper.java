@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,6 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public List<String> getData(String siraNo, int sutunNo) {
+        Log.e("getData","siraNo:"+siraNo+" sutunNo:"+ sutunNo);
         readDatabase(siraNo);
         listData = new ArrayList<>();
         return listData=insertLoopCloseDB(listData,sutunNo);

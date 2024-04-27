@@ -10,20 +10,52 @@
         android:id="@+id/bsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="MissingConstraints">
-        <TextView
-            android:layout_width="match_parent"
+        android:orientation="horizontal"
+        tools:ignore="MissingConstraints"
+        android:baselineAligned="false">
+        <LinearLayout
+            android:id="@+id/bsInfoLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/baslik"
-            android:hint="@string/baslik">
-        </TextView>
-        <TextView
-            android:layout_width="match_parent"
+            android:layout_weight="0.7"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/baslik"
+                android:hint="@string/baslik">
+            </TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/marka"
+                android:hint="@string/marka">
+            </TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bsRouteLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/marka"
-            android:hint="@string/marka">
+            android:layout_weight="0.3"
+            android:orientation="vertical"
+            android:layout_gravity="end"
+            tools:ignore="MissingConstraints">
 
-        </TextView>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/btnRoute"
+                android:text="@string/route">
+
+            </Button>
+
+
+
+        </LinearLayout>
+
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
