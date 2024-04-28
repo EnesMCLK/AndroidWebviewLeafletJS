@@ -61,11 +61,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
         baslik = view.findViewById(R.id.baslik);
         marka = view.findViewById(R.id.marka);
         btnRoute = view.findViewById(R.id.btnRoute);
-        btnRoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Buraya tıklama eylemleri yazılacak.
-            }
+        btnRoute.setOnClickListener(v -> {
+            // Buraya tıklama eylemleri yazılacak.
         });
 
 
