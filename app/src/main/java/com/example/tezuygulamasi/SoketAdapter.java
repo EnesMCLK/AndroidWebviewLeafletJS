@@ -1,7 +1,6 @@
 package com.example.tezuygulamasi;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +16,12 @@ public class SoketAdapter extends RecyclerView.Adapter<SoketAdapter.SoketHolder>
 
     ArrayList<Soket> soketArrayList;
     LayoutInflater inflater;
+    BottomSheet bottomSheet;
 
     public SoketAdapter(ArrayList<Soket> soketArrayList, Context context) {
         inflater = LayoutInflater.from(context);
         this.soketArrayList = soketArrayList;
+        bottomSheet = new BottomSheet();
     }
 
     @NonNull
@@ -39,7 +40,6 @@ public class SoketAdapter extends RecyclerView.Adapter<SoketAdapter.SoketHolder>
 
     @Override
     public int getItemCount() {
-        Log.e("getItemCount", String.valueOf(soketArrayList.size()));
         return soketArrayList.size();
     }
 
