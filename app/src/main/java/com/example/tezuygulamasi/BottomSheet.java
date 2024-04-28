@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -18,11 +20,12 @@ import java.util.List;
 public class BottomSheet extends BottomSheetDialogFragment {
 
     protected View view;
-    private List<String> mData,mBaslik,mMarka;
+    private List<String> mData,mBaslik,mMarka,mSarjAgiIsletmecisi,mYesilSarj,mAdres,mSoketNo,mSoketTipi,mSoketTuru,mSoketGucu,mX,mY;
     private String mSiraNo;
     private TextView baslik,marka;
     private Button btnRoute;
     private DatabaseHelper dbhelper;
+    private RecyclerView recyclerView;
 
     public static BottomSheet newInstance(String data) {
         BottomSheet fragment = new BottomSheet();
@@ -49,6 +52,43 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        dbhelper = new DatabaseHelper(getContext());
+
+        view = view.findViewById(R.id.modalBottomSheetContainer);
+        baslik = view.findViewById(R.id.baslik);
+        marka = view.findViewById(R.id.marka);
+        btnRoute = view.findViewById(R.id.btnRoute);
+        btnRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Buraya tıklama eylemleri yazılacak.
+            }
+        });
+
+
+        try {
+            Log.e("DATABASE","onViewCreated: "+data(3));
+            baslik.setText(baslik().get(0));
+            marka.setText(marka().get(0));
+
+            try {
+                SoketAdapter soketAdapter = new SoketAdapter(Soket.getData(),getContext());
+                recyclerView = view.findViewById(R.id.bsSoketLayout);
+                recyclerView.setAdapter(soketAdapter);
+                recyclerView.setHasFixedSize(true);
+                LinearLayoutManager manager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+                recyclerView.setLayoutManager(manager);
+            }catch (Exception e){
+                Log.e("ADAPTER",String.valueOf(e.getLocalizedMessage()));
+            }
+        } catch (Exception e){
+            Log.e("BottomSheet onViewCreated",String.valueOf(e.getLocalizedMessage()));
+        }
+    }
+
     public List<String> data(int sutunNo){
         mData = dbhelper.getData(mSiraNo, sutunNo);
         return mData;
@@ -64,27 +104,38 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return mMarka;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        dbhelper = new DatabaseHelper(getContext());
+    public List<String> sarjAgiIsletmecisi(){
+        mSarjAgiIsletmecisi = dbhelper.getSarjAgiIsletmecisi(mSiraNo);
+        return mSarjAgiIsletmecisi;
+    }
 
-        view = view.findViewById(R.id.modalBottomSheetContainer);
-        baslik = view.findViewById(R.id.baslik);
-        marka = view.findViewById(R.id.marka);
-        btnRoute = view.findViewById(R.id.btnRoute);
+    public List<String> YesilSarj(){
+        mYesilSarj = dbhelper.getYesilSarj(mSiraNo);
+        return mYesilSarj;
+    }
 
-        try {
-            Log.e("DATABASE","onViewCreated: "+data(3));
+    public List<String> Adres(){
+        mAdres = dbhelper.getAdres(mSiraNo);
+        return mAdres;
+    }
 
+    public List<String> SoketNo(){
+        mSoketNo = dbhelper.getSoketNo(mSiraNo);
+        return mSoketNo;
+    }
 
+    public List<String> SoketTipi(){
+        mSoketTipi = dbhelper.getSoketTipi(mSiraNo);
+        return mSoketTipi;
+    }
 
+    public List<String> SoketTuru(){
+        mSoketTuru = dbhelper.getSoketTuru(mSiraNo);
+        return mSoketTuru;
+    }
 
-
-            baslik.setText(baslik().get(0));
-            marka.setText(marka().get(0));
-        } catch (Exception e){
-            e.getLocalizedMessage();
-        }
+    public List<String> SoketGucu(){
+        mSoketGucu = dbhelper.getSoketGucu(mSiraNo);
+        return mSoketGucu;
     }
 }

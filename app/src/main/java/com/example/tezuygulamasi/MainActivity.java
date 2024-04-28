@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private static final int GPS_ENABLE_REQUEST = 102;
     private LocationManager locationManager;
 
+    @SuppressLint("StaticFieldLeak")
     protected WebView mapView;
     protected FloatingActionButton buttonTriggerJS;
     protected BottomSheetDialog dialog;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public class WebAppInterface {
         Context mContext;
         Dialog mDialog;
-        DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
+        DatabaseHelper dbHelper;
         String siraNo;
         TextView mbsTextView;
         WebView mWebView;
@@ -61,52 +62,45 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             mContext = context;
             mDialog = dialog;
             mWebView = webView;
+            dbHelper = new DatabaseHelper(context.getApplicationContext());
         }
-
         @JavascriptInterface
         public void showToast(String toast) {
             Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
         }
-
         @JavascriptInterface
         public void markerClicked(String siraNo) {
             this.siraNo = siraNo;
             this.siraNo = getMarkerClicked();
         }
-
         public String getMarkerClicked(){
             bottomSheet = BottomSheet.newInstance(siraNo);
             bottomSheet.show(getSupportFragmentManager(), "BottomSheetDialogFragment");
             return siraNo;
         }
-
         @JavascriptInterface
         public void sendLongitude(String data) {
             String jsFunction = String.format("javascript: aLongitude = '%s';", data);
             Log.e("androidLongitude",data);
             mWebView.evaluateJavascript(jsFunction, null);
         }
-
         @JavascriptInterface
         public void sendLatitude(String data) {
             String jsFunction = String.format("javascript: aLatitude = '%s';", data);
             Log.e("androidLatitude",data);
             mWebView.evaluateJavascript(jsFunction, null);
         }
-
         @JavascriptInterface
         public void sendLocation(double latitude, double longitude) {
             mWebView.loadUrl("javascript:receiveLocation(" + latitude + "," + longitude + ")");
             Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
         }
-
         @JavascriptInterface
         public void showLog(String tag, String message) {
             // WebView'den gelen mesajı Log mesajı olarak göster
             Log.e("Webview "+tag,message);
         }
     }
-
 
 // ---------------------------------- DATABASE ----------------------------------
     protected void databaseHelper(DatabaseHelper databaseHelper){
@@ -128,6 +122,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView.loadUrl(file+"index.html");
         //buttonTriggerJS.setOnClickListener(v -> mapView.evaluateJavascript("javascript:showAndroidToast();", null));
         buttonTriggerJS.setOnClickListener(v -> checkPermissionsAndStart());
+    }
+
+    public WebView getWebView(){
+        return mapView;
     }
 
 // ---------------------------------- ACTIVITY LIFE CYCLE ----------------------------------
@@ -185,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         }
     }
-
     private void showRationaleDialog(String title, String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title)
@@ -198,13 +195,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 .create()
                 .show();
     }
-
     @SuppressLint("SetTextI18n")
     public void onLocationChanged(Location location) {
         strLocationLatitude = String.valueOf(location.getLatitude());
         strLocationLongitude = String.valueOf(location.getLongitude());
         dLocationLatitude = location.getLatitude();
         dLocationLongitude = location.getLongitude();
+
         WebAppInterface webAppInterface = new WebAppInterface(this,dialog,mapView);
         webAppInterface.sendLatitude(strLocationLatitude);
         webAppInterface.sendLongitude(strLocationLongitude);
@@ -219,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         Log.e("GPS","Latitude:"+dLocationLatitude+" Longitude:"+dLocationLongitude);
     }
-
     private void checkPermissionsAndStart() {
         if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // İzin iste
@@ -229,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             checkLocationEnabled();
         }
     }
-
     private void checkLocationEnabled() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -241,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             startLocationUpdates();
         }
     }
-
     private void startLocationUpdates() {
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);

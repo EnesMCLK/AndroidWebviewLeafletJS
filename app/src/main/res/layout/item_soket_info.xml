@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:id="@+id/cvLayout">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FFFFFF">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables,UselessParent">
+                <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/baseline_electrical_services_24"
+                        android:layout_gravity="center"
+                        tools:ignore="ContentDescription">
+                    </ImageView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvGuc_kW"
+                        android:textSize="12sp"
+                        android:textColor="#6495ED"
+                        android:layout_gravity="center"
+                        android:hint="@string/guc_kw">
+                    </TextView>
+            </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgSoketTip"
+                android:src="@mipmap/ac_type2"
+                android:backgroundTint="#6495ED"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no">
+            </ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvSoketTuru"
+                android:textSize="9sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:hint="@string/ac_type2"
+                tools:ignore="SmallSp">
+            </TextView>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

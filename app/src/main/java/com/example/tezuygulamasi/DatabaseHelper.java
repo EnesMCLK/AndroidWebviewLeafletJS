@@ -134,36 +134,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<String> getSoketNo(String siraNo){
         readDatabase(siraNo);
         listSoketNo = new ArrayList<>();
-        return listSoketNo=insertLoopCloseDB(listSoketNo,7);
+        return listSoketNo=insertLoopCloseDB(listSoketNo,8);
     }
 
     public List<String> getSoketTipi(String siraNo){
         readDatabase(siraNo);
         listSoketTipi = new ArrayList<>();
-        return listSoketTipi=insertLoopCloseDB(listSoketTipi,8);
+        return listSoketTipi=insertLoopCloseDB(listSoketTipi,9);
     }
 
     public List<String> getSoketTuru(String siraNo){
         readDatabase(siraNo);
         listSoketTuru = new ArrayList<>();
-        return listSoketTuru=insertLoopCloseDB(listSoketTuru,8);
+        return listSoketTuru=insertLoopCloseDB(listSoketTuru,10);
     }
 
     public List<String> getSoketGucu(String siraNo){
         readDatabase(siraNo);
         listSoketGucu = new ArrayList<>();
-        return listSoketGucu=insertLoopCloseDB(listSoketGucu,9);
+        return listSoketGucu=insertLoopCloseDB(listSoketGucu,11);
     }
 
     public List<String> getX(String siraNo){
         readDatabase(siraNo);
         listX = new ArrayList<>();
-        return listX=insertLoopCloseDB(listX,10);
+        return listX=insertLoopCloseDB(listX,12);
     }
 
     public List<String> getY(String siraNo){
         readDatabase(siraNo);
         listY = new ArrayList<>();
-        return listY=insertLoopCloseDB(listY,11);
+        return listY=insertLoopCloseDB(listY,13);
     }
 }

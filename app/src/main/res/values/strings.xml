@@ -6,4 +6,6 @@
     <string name="adres" tools:ignore="Typos">Adres</string>
     <string name="rotaOlustur">Rota Oluştur</string>
     <string name="route">Yol Tarifi</string>
+    <string name="ac_type2">AC TYPE2</string>
+    <string name="guc_kw">Güç kW</string>
 </resources>
