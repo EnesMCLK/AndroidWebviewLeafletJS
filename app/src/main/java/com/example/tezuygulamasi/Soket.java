@@ -4,39 +4,39 @@ import java.util.ArrayList;
 
 public class Soket {
     private DatabaseHelper dbhelper;
-    private int imgSoketTuru;
-    private String tvSoketTuru, tvGuc_kW;
+    private static int imgSoketTuru;
+    private static String tvSoketTuru, tvGuc_kW;
 
 
-    public Soket(int imgSoketTip, String tvSoketTip, String tvGuc_kW) {
-        this.imgSoketTuru = imgSoketTip;
-        this.tvSoketTuru = tvSoketTip;
-        this.tvGuc_kW = tvGuc_kW;
+    public Soket(int iSoketTip, String sSoketTip, String sGuc_kW) {
+        imgSoketTuru = iSoketTip;
+        tvSoketTuru = sSoketTip;
+        tvGuc_kW = sGuc_kW;
     }
 
 
-    public int getImgSoketTuru() {
+    public static int getImgSoketTuru() {
         return imgSoketTuru;
     }
 
     public void setImgSoketTuru(int imgSoketTip) {
-        this.imgSoketTuru = imgSoketTip;
+        imgSoketTuru = imgSoketTip;
     }
 
-    public String getTvSoketTuru() {
+    public static String getTvSoketTuru() {
         return tvSoketTuru;
     }
 
-    public void setTvSoketTuru(String tvSoketTuru) {
-        this.tvSoketTuru = tvSoketTuru;
+    public void setTvSoketTuru(String sSoketTuru) {
+        tvSoketTuru = sSoketTuru;
     }
 
-    public String getTvGuc_kW() {
+    public static String getTvGuc_kW() {
         return tvGuc_kW;
     }
 
-    public void setTvGuc_kW(String tvGuc_kW) {
-        this.tvGuc_kW = tvGuc_kW;
+    public void setTvGuc_kW(String sGuc_kW) {
+        tvGuc_kW = sGuc_kW;
     }
 
     public static ArrayList<Soket> getData(){
@@ -44,10 +44,7 @@ public class Soket {
         String tvSoketTuru, tvGuc_kW;
         BottomSheet bottomSheet = new BottomSheet();
         //SoketAdapter.SoketHolder soketHolder = new SoketAdapter.SoketHolder(new View(bottomSheet.getContext()));
-        imgSoketTuru = R.mipmap.ac_type2;
-        tvSoketTuru = "AC TYPE2";
-        tvGuc_kW = "220 kW";
-        Soket soket = new Soket(imgSoketTuru,tvSoketTuru,tvGuc_kW);
+        Soket soket = new Soket(getImgSoketTuru(),getTvSoketTuru(),getTvGuc_kW());
         ArrayList<Soket> soketArrayList = new ArrayList<>();
         soketArrayList.add(soket);
 

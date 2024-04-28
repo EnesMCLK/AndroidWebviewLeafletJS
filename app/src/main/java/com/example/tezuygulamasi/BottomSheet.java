@@ -1,5 +1,9 @@
 package com.example.tezuygulamasi;
 
+import static com.example.tezuygulamasi.Soket.getImgSoketTuru;
+import static com.example.tezuygulamasi.Soket.getTvGuc_kW;
+import static com.example.tezuygulamasi.Soket.getTvSoketTuru;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BottomSheet extends BottomSheetDialogFragment {
@@ -72,13 +77,39 @@ public class BottomSheet extends BottomSheetDialogFragment {
             marka.setText(marka().get(0));
 
             try {
+                Soket soket = new Soket(getImgSoketTuru(),getTvSoketTuru(),getTvGuc_kW());
+
+                switch (String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(0))){
+                    case "AC_TYPE2":
+                        Log.e("AC_TYPE2", String.valueOf(R.mipmap.ac_type2));
+                        soket.setImgSoketTuru(R.mipmap.ac_type2);
+                    case "DC_CCS":
+                        Log.e("DC_CCS", String.valueOf(R.mipmap.dc_css2));
+                        soket.setImgSoketTuru(R.mipmap.dc_css2);
+                    case "DC_CHADEMO":
+                        Log.e("DC_CHADEMO", String.valueOf(R.mipmap.dc_chademo));
+                        soket.setImgSoketTuru(R.mipmap.dc_chademo);
+                }
+
+                String guc_KW = dbhelper.getSoketGucu(mSiraNo).get(0) + " kW";
+                soket.setTvGuc_kW(guc_KW);
+                soket.setTvSoketTuru(String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(0)));
+
+                soket = new Soket(getImgSoketTuru(), getTvSoketTuru(), getTvGuc_kW());
+                ArrayList<Soket> soketArrayList = new ArrayList<>();
+                soketArrayList.add(soket);
+            } catch (Exception e){
+                Log.e("Soket getData",String.valueOf(e.getLocalizedMessage()));
+            }
+
+            try {
                 SoketAdapter soketAdapter = new SoketAdapter(Soket.getData(),getContext());
                 recyclerView = view.findViewById(R.id.bsSoketLayout);
                 recyclerView.setAdapter(soketAdapter);
                 recyclerView.setHasFixedSize(true);
                 LinearLayoutManager manager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
                 recyclerView.setLayoutManager(manager);
-            }catch (Exception e){
+            } catch (Exception e){
                 Log.e("ADAPTER",String.valueOf(e.getLocalizedMessage()));
             }
         } catch (Exception e){

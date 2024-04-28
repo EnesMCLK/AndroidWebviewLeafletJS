@@ -53,9 +53,9 @@ public class SoketAdapter extends RecyclerView.Adapter<SoketAdapter.SoketHolder>
         }
 
         public void setData(Soket soket){
-            this.tvSoketTip.setText(soket.getTvSoketTuru());
-            this.tvGuc_kW.setText(soket.getTvGuc_kW());
-            this.imgSoketTip.setBackgroundResource(soket.getImgSoketTuru());
+            this.tvSoketTip.setText(Soket.getTvSoketTuru());
+            this.tvGuc_kW.setText(Soket.getTvGuc_kW());
+            this.imgSoketTip.setBackgroundResource(Soket.getImgSoketTuru());
         }
     }
 
