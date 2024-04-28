@@ -15,11 +15,11 @@ public class Soket {
     }
 
 
-    public int getImgSoketTip() {
+    public int getImgSoketTuru() {
         return imgSoketTuru;
     }
 
-    public void setImgSoketTip(int imgSoketTip) {
+    public void setImgSoketTuru(int imgSoketTip) {
         this.imgSoketTuru = imgSoketTip;
     }
 
