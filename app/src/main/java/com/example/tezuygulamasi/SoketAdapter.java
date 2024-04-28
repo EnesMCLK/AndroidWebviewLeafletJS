@@ -1,6 +1,7 @@
 package com.example.tezuygulamasi;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class SoketAdapter extends RecyclerView.Adapter<SoketAdapter.SoketHolder>
 
     @Override
     public int getItemCount() {
+        Log.e("getItemCount", String.valueOf(soketArrayList.size()));
         return soketArrayList.size();
     }
 
@@ -55,7 +57,7 @@ public class SoketAdapter extends RecyclerView.Adapter<SoketAdapter.SoketHolder>
         public void setData(Soket soket){
             this.tvSoketTip.setText(Soket.getTvSoketTuru());
             this.tvGuc_kW.setText(Soket.getTvGuc_kW());
-            this.imgSoketTip.setBackgroundResource(Soket.getImgSoketTuru());
+            this.imgSoketTip.setImageResource(Soket.getImgSoketTuru());
         }
     }
 

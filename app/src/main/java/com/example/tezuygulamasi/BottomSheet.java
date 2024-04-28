@@ -77,27 +77,32 @@ public class BottomSheet extends BottomSheetDialogFragment {
             marka.setText(marka().get(0));
 
             try {
-                Soket soket = new Soket(getImgSoketTuru(),getTvSoketTuru(),getTvGuc_kW());
-
-                switch (String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(0))){
-                    case "AC_TYPE2":
-                        Log.e("AC_TYPE2", String.valueOf(R.mipmap.ac_type2));
-                        soket.setImgSoketTuru(R.mipmap.ac_type2);
-                    case "DC_CCS":
-                        Log.e("DC_CCS", String.valueOf(R.mipmap.dc_css2));
-                        soket.setImgSoketTuru(R.mipmap.dc_css2);
-                    case "DC_CHADEMO":
-                        Log.e("DC_CHADEMO", String.valueOf(R.mipmap.dc_chademo));
-                        soket.setImgSoketTuru(R.mipmap.dc_chademo);
-                }
-
-                String guc_KW = dbhelper.getSoketGucu(mSiraNo).get(0) + " kW";
-                soket.setTvGuc_kW(guc_KW);
-                soket.setTvSoketTuru(String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(0)));
-
-                soket = new Soket(getImgSoketTuru(), getTvSoketTuru(), getTvGuc_kW());
                 ArrayList<Soket> soketArrayList = new ArrayList<>();
-                soketArrayList.add(soket);
+                SoketAdapter soketAdapter = new SoketAdapter(soketArrayList,getContext());
+                Soket soket = new Soket(getImgSoketTuru(),getTvSoketTuru(),getTvGuc_kW());
+                String guc_KW;
+                for (int i = 0; i < dbhelper.getIstasyonNo(mSiraNo).size(); i++){
+                    switch (String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(i))){
+                        case "AC_TYPE2":
+                            Log.e("AC_TYPE2", String.valueOf(R.mipmap.ac_type2));
+                            soket.setImgSoketTuru(R.mipmap.ac_type2);
+                        case "DC_CCS":
+                            Log.e("DC_CCS", String.valueOf(R.mipmap.dc_css2));
+                            soket.setImgSoketTuru(R.mipmap.dc_css2);
+                        case "DC_CHADEMO":
+                            Log.e("DC_CHADEMO", String.valueOf(R.mipmap.dc_chademo));
+                            soket.setImgSoketTuru(R.mipmap.dc_chademo);
+                        default:
+                            Log.e("dbhelper.getSoketTuru: ",String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(i)));
+                    }
+                    guc_KW = dbhelper.getSoketGucu(mSiraNo).get(i) + " kW";
+                    soket.setTvGuc_kW(guc_KW);
+                    soket.setTvSoketTuru(String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(i)));
+                    soketArrayList.add(soket);
+                }
+                // (dbhelper.getSoketTuru(mSiraNo).get());
+
+
             } catch (Exception e){
                 Log.e("Soket getData",String.valueOf(e.getLocalizedMessage()));
             }
@@ -115,6 +120,10 @@ public class BottomSheet extends BottomSheetDialogFragment {
         } catch (Exception e){
             Log.e("BottomSheet onViewCreated",String.valueOf(e.getLocalizedMessage()));
         }
+    }
+
+    public String getSiraNo(){
+        return this.mSiraNo;
     }
 
     public List<String> data(int sutunNo){

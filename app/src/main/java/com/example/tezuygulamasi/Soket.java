@@ -44,6 +44,7 @@ public class Soket {
         String tvSoketTuru, tvGuc_kW;
         BottomSheet bottomSheet = new BottomSheet();
         //SoketAdapter.SoketHolder soketHolder = new SoketAdapter.SoketHolder(new View(bottomSheet.getContext()));
+
         Soket soket = new Soket(getImgSoketTuru(),getTvSoketTuru(),getTvGuc_kW());
         ArrayList<Soket> soketArrayList = new ArrayList<>();
         soketArrayList.add(soket);
