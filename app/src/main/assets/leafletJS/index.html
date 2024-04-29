@@ -77,12 +77,12 @@
 	*/
 
 	// Markera tıklama eylemi
-	function onMarkerClick(X,Y) {
+	function onMarkerClick(e) {
 		var latlng = e.latlng;
 
 		var panel = L.Routing.control({
 			waypoints: [
-				L.latLng(40.3729218,29.0713874),  // startDest,
+				startDest,
 				latlng
 			],
 			router: new L.Routing.osrmv1({
@@ -108,17 +108,29 @@
 	var marker_1 = L.marker([40.82,29.92]).addTo(map).on('click',function(e){onMarkerClick(e)});
 	markers.push(marker_1);
 
+
+
 /* -------------------------------------- ANDROİD KOMUTLARI -------------------------------------- */
 	// Android komutu ile Webview'i kontrol etme ve Javascript fonksiyonunu çalıştırma.
-	function receiveLocation(lat, lon) {
-        marker.setLatLng([lat, lon]);
-        map.panTo(new L.LatLng(lat, lon));
+	function showDynamicAlert(message) {
+        alert(message);
+    }
+
+	function triggerAndroidAlert() {
+        Android.showAlert('Bu bir test mesajıdır!');
+    }
+
+    function receiveLocation(latitude, longitude) {
+        console.log("Enlem: " + latitude + ", Boylam: " + longitude);
+
+        userLocation = [latitude, longitude];
+        L.marker(userLocation).addTo(map)
+			.bindPopup('Buradasın')
+			.openPopup();
+		map.setView(userLocation, 13);
+		startDest = userLocation;
     }
     window.receiveLocation = receiveLocation;
-
-	function ucus() {
-		map.flyTo(hedef,15,animasyon);
-	}
 
 	function showAndroidToast() {
         Android.showToast(aLatitude);
@@ -128,38 +140,11 @@
         Android.showLog(tag,message);
     }
 
-    function sendLatitude(latitude){
-        aLatitude = latitude;
-    }
-
-    function sendLongitude(longitude){
-        aLongitude = longitude;
+    function receiveData(data) {
+        Android.showToast("Veri alındı: " + data);
     }
 
 /* -------------------------------------- ANDROİD KOMUTLARI -------------------------------------- */
-    /*
-	// Geolocation(Konum) Metodu
-	if ('geolocation' in navigator) {
-		navigator.geolocation.getCurrentPosition(function(position) {
-		// [position.coords.latitude, position.coords.longitude]
-		userLocation = [position.coords.latitude, position.coords.longitude];
-		// Kullanıcının konumunu haritada işaretleme
-		L.marker(userLocation).addTo(map)
-			.bindPopup('Buradasın')
-			.openPopup();
-		// Haritayı kullanıcının konumuna odaklama
-		map.setView(userLocation, 13);
-		startDest = userLocation;
-	});
-	} else {
-		alert('Tarayıcında Geolocation desteklenmiyor.');
-	}
-	*/
-
-	function androidLongitude(data){
-        aLongitude = data;
-	}
-
 	// En yakın Marker bulucu
 	function findClosestMarker(clickedLatLng, markers) {
 		var closestMarker = null;
@@ -184,14 +169,6 @@
 				changeMarkerColor(marker,'red');
 			}
 		});
-	}
-
-	// Button olusturma fonksiyonu
-	function createButton(label, container) {
-		var btn = L.DomUtil.create('button', '', container);
-		btn.setAttribute('type', 'button');
-		btn.innerHTML = label;
-		return btn;
 	}
 
 	// Marker rengini degistirme

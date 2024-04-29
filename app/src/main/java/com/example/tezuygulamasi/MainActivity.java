@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected String file="file:///android_asset/leafletJS/";
     private String strLocationLatitude, strLocationLongitude;
     private double dLocationLatitude, dLocationLongitude;
+    private DatabaseHelper dbhelper;
+    private WebAppInterface webAppInterface;
 
 
     // ---------------------------------- WEB APP INTERFACE ----------------------------------
@@ -79,18 +81,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             return siraNo;
         }
         @JavascriptInterface
-        public void sendLongitude(String data) {
-            String jsFunction = String.format("javascript: aLongitude = '%s';", data);
-            Log.e("androidLongitude",data);
-            mWebView.evaluateJavascript(jsFunction, null);
-        }
-        @JavascriptInterface
-        public void sendLatitude(String data) {
-            String jsFunction = String.format("javascript: aLatitude = '%s';", data);
-            Log.e("androidLatitude",data);
-            mWebView.evaluateJavascript(jsFunction, null);
-        }
-        @JavascriptInterface
         public void sendLocation(double latitude, double longitude) {
             mWebView.loadUrl("javascript:receiveLocation(" + latitude + "," + longitude + ")");
             Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
@@ -120,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView.getSettings().setJavaScriptEnabled(true);
         mapView.getSettings().setDomStorageEnabled(true);
         mapView.loadUrl(file+"index.html");
-        //buttonTriggerJS.setOnClickListener(v -> mapView.evaluateJavascript("javascript:showAndroidToast();", null));
         buttonTriggerJS.setOnClickListener(v -> checkPermissionsAndStart());
     }
 
@@ -140,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         cmapView(mapView,buttonTriggerJS);
         requestLocationUpdates();
+
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         databaseHelper(dbHelper);
@@ -202,9 +192,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         dLocationLatitude = location.getLatitude();
         dLocationLongitude = location.getLongitude();
 
-        WebAppInterface webAppInterface = new WebAppInterface(this,dialog,mapView);
-        webAppInterface.sendLatitude(strLocationLatitude);
-        webAppInterface.sendLongitude(strLocationLongitude);
+        webAppInterface = new WebAppInterface(this,dialog,mapView);
         mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
         mapView.addJavascriptInterface(new WebAppInterface(this,dialog,mapView), "Android");
         try {

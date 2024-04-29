@@ -4,6 +4,7 @@ import static com.example.tezuygulamasi.Soket.getImgSoketTuru;
 import static com.example.tezuygulamasi.Soket.getTvGuc_kW;
 import static com.example.tezuygulamasi.Soket.getTvSoketTuru;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,6 +60,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         return view;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -86,10 +88,34 @@ public class BottomSheet extends BottomSheetDialogFragment {
             try {
                 ArrayList<Soket> soketArrayList = new ArrayList<>();
                 SoketAdapter soketAdapter = new SoketAdapter(soketArrayList,getContext());
+                LinearLayoutManager manager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
+                recyclerView = view.findViewById(R.id.bsSoketLayout);
                 Soket soket = new Soket(getImgSoketTuru(),getTvSoketTuru(),getTvGuc_kW());
                 String guc_KW;
-                for (int i = 0; i < dbhelper.getIstasyonNo(mSiraNo).size(); i++){
-                    switch (String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(i))){
+                if (soketAdapter.getItemCount() != 0){
+                    for (int i = 1; i < dbhelper.getIstasyonNo(mSiraNo).size(); i++){
+                        switch (String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(i))){
+                            case "AC_TYPE2":
+                                Log.e("AC_TYPE2", String.valueOf(R.mipmap.ac_type2));
+                                soket.setImgSoketTuru(R.mipmap.ac_type2);
+                            case "DC_CCS":
+                                Log.e("DC_CCS", String.valueOf(R.mipmap.dc_ccs));
+                                soket.setImgSoketTuru(R.mipmap.dc_ccs);
+                            case "DC_CHADEMO":
+                                Log.e("DC_CHADEMO", String.valueOf(R.mipmap.dc_chademo));
+                                soket.setImgSoketTuru(R.mipmap.dc_chademo);
+                            default:
+                                Log.e("dbhelper.getSoketTuru: ",String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(i)));
+                        }
+                        guc_KW = dbhelper.getSoketGucu(mSiraNo).get(i) + " kW";
+                        soket.setTvGuc_kW(guc_KW);
+                        soket.setTvSoketTuru(String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(i)));
+                        soketArrayList.add(soket);
+                        soketAdapter.notifyDataSetChanged();
+                        recyclerView.setLayoutManager(manager);
+                    }
+                } else {
+                    switch (String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(0))){
                         case "AC_TYPE2":
                             Log.e("AC_TYPE2", String.valueOf(R.mipmap.ac_type2));
                             soket.setImgSoketTuru(R.mipmap.ac_type2);
@@ -100,29 +126,18 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             Log.e("DC_CHADEMO", String.valueOf(R.mipmap.dc_chademo));
                             soket.setImgSoketTuru(R.mipmap.dc_chademo);
                         default:
-                            Log.e("dbhelper.getSoketTuru: ",String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(i)));
+                            Log.e("dbhelper.getSoketTuru: ",String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(0)));
+                        }
+                        guc_KW = dbhelper.getSoketGucu(mSiraNo).get(0) + " kW";
+                        soket.setTvGuc_kW(guc_KW);
+                        soket.setTvSoketTuru(String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(0)));
+                        soketArrayList.add(soket);
+                        recyclerView.setAdapter(soketAdapter);
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(manager);
                     }
-                    guc_KW = dbhelper.getSoketGucu(mSiraNo).get(i) + " kW";
-                    soket.setTvGuc_kW(guc_KW);
-                    soket.setTvSoketTuru(String.valueOf(dbhelper.getSoketTuru(mSiraNo).get(i)));
-                    soketArrayList.add(soket);
-                }
-                // (dbhelper.getSoketTuru(mSiraNo).get());
-
-
             } catch (Exception e){
                 Log.e("Soket getData",String.valueOf(e.getLocalizedMessage()));
-            }
-
-            try {
-                SoketAdapter soketAdapter = new SoketAdapter(Soket.getData(),getContext());
-                recyclerView = view.findViewById(R.id.bsSoketLayout);
-                recyclerView.setAdapter(soketAdapter);
-                recyclerView.setHasFixedSize(true);
-                LinearLayoutManager manager = new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false);
-                recyclerView.setLayoutManager(manager);
-            } catch (Exception e){
-                Log.e("ADAPTER",String.valueOf(e.getLocalizedMessage()));
             }
         } catch (Exception e){
             Log.e("BottomSheet onViewCreated",String.valueOf(e.getLocalizedMessage()));
