@@ -4,6 +4,8 @@ import static com.example.tezuygulamasi.Soket.getImgSoketTuru;
 import static com.example.tezuygulamasi.Soket.getTvGuc_kW;
 import static com.example.tezuygulamasi.Soket.getTvSoketTuru;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,13 +63,18 @@ public class BottomSheet extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbhelper = new DatabaseHelper(getContext());
+        String X = String.valueOf(dbhelper.getX(mSiraNo).get(0));
+        String Y = String.valueOf(dbhelper.getY(mSiraNo).get(0));
 
         view = view.findViewById(R.id.modalBottomSheetContainer);
         baslik = view.findViewById(R.id.baslik);
         marka = view.findViewById(R.id.marka);
         btnRoute = view.findViewById(R.id.btnRoute);
-        btnRoute.setOnClickListener(v -> {
-            // Buraya tıklama eylemleri yazılacak.
+
+        btnRoute.setOnLongClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + X + "," + Y));
+            startActivity(intent);
+            return true;
         });
 
 
@@ -87,8 +94,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
                             Log.e("AC_TYPE2", String.valueOf(R.mipmap.ac_type2));
                             soket.setImgSoketTuru(R.mipmap.ac_type2);
                         case "DC_CCS":
-                            Log.e("DC_CCS", String.valueOf(R.mipmap.dc_css2));
-                            soket.setImgSoketTuru(R.mipmap.dc_css2);
+                            Log.e("DC_CCS", String.valueOf(R.mipmap.dc_ccs));
+                            soket.setImgSoketTuru(R.mipmap.dc_ccs);
                         case "DC_CHADEMO":
                             Log.e("DC_CHADEMO", String.valueOf(R.mipmap.dc_chademo));
                             soket.setImgSoketTuru(R.mipmap.dc_chademo);
