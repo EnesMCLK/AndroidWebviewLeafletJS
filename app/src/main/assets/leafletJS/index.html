@@ -34,6 +34,12 @@
             duration: 3,            // Animasyon süresi (saniye cinsinden)
             easeLinearity: 0.25     // Hareketin hızı
         };
+        var circleIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" fill="blue" stroke="white" stroke-width="5" /></svg>',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20]
+        });
     </script>
 </head>
 <body>
@@ -44,6 +50,9 @@
 	var userLocation;
 	var closestMarker;
 	var aLatitude, aLongitude;
+	var latlng;
+	var user;
+	var userRadius = 1;
 	var map = L.map('map').setView([40.7, 29.9], 10);
 	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 20,
@@ -78,7 +87,7 @@
 
 	// Markera tıklama eylemi
 	function onMarkerClick(e) {
-		var latlng = e.latlng;
+		latlng = e.latlng;
 
 		var panel = L.Routing.control({
 			waypoints: [
@@ -124,10 +133,12 @@
         console.log("Enlem: " + latitude + ", Boylam: " + longitude);
 
         userLocation = [latitude, longitude];
-        L.marker(userLocation).addTo(map)
-			.bindPopup('Buradasın')
-			.openPopup();
-		map.setView(userLocation, 13);
+
+        if (user) {
+            map.closePopup(user);
+        }
+        user = L.marker(userLocation, {icon: circleIcon}).addTo(map).bindPopup();
+		map.setView(userLocation, 15);
 		startDest = userLocation;
     }
     window.receiveLocation = receiveLocation;
