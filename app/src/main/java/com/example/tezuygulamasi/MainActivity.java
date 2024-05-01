@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @SuppressLint("StaticFieldLeak")
     protected WebView mapView;
-    protected FloatingActionButton buttonTriggerJS;
+    protected FloatingActionButton buttonTriggerJS, meTriggerJS;
     protected BottomSheetDialog dialog;
     protected BottomSheet bottomSheet;
     protected View view;
@@ -86,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
         }
         @JavascriptInterface
+        public void showLocation(double latitude, double longitude) {
+            mWebView.loadUrl("javascript:getShowLocation(" + latitude + "," + longitude + ")");
+            Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
+        }
+        @JavascriptInterface
         public void showLog(String tag, String message) {
             // WebView'den gelen mesajı Log mesajı olarak göster
             Log.e("Webview "+tag,message);
@@ -111,6 +116,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView.getSettings().setDomStorageEnabled(true);
         mapView.loadUrl(file+"index.html");
         buttonTriggerJS.setOnClickListener(v -> checkPermissionsAndStart());
+        meTriggerJS.setOnClickListener(v -> {
+            if (dLocationLatitude>0 && dLocationLongitude>0){
+                mapView.loadUrl("javascript:getShowLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
+            }
+        });
+
     }
 
     public WebView getWebView(){
@@ -126,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         mapView = findViewById(R.id.mapview);
         buttonTriggerJS = findViewById(R.id.mButton);
+        meTriggerJS = findViewById(R.id.mMe);
+
 
         cmapView(mapView,buttonTriggerJS);
         requestLocationUpdates();
