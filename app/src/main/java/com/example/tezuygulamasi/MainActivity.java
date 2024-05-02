@@ -115,7 +115,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView.getSettings().setJavaScriptEnabled(true);
         mapView.getSettings().setDomStorageEnabled(true);
         mapView.loadUrl(file+"index.html");
-        buttonTriggerJS.setOnClickListener(v -> checkPermissionsAndStart());
+        buttonTriggerJS.setOnClickListener(v -> {
+            checkPermissionsAndStart();
+            Log.e("buttonTriggerJS", String.valueOf(dLocationLatitude));
+            Log.e("buttonTriggerJS", String.valueOf(dLocationLongitude));
+            if (dLocationLatitude>0 && dLocationLongitude>0){
+                mapView.loadUrl("javascript:receiveLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
+            }
+        });
         meTriggerJS.setOnClickListener(v -> {
             if (dLocationLatitude>0 && dLocationLongitude>0){
                 mapView.loadUrl("javascript:getShowLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
