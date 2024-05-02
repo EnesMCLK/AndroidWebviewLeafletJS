@@ -64,6 +64,7 @@
 	var aLatitude, aLongitude;
 	var latlng;
 	var user;
+	var routingControl;
 	var map = L.map('map').setView([40.7, 29.9], 10);
 	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 20,
@@ -73,7 +74,13 @@
 	marker();
 
 	// MarkerClusterGroup nesnesi
-	var markersCluster = L.markerClusterGroup();
+	var markersCluster = L.markerClusterGroup({
+            maxClusterRadius: 30,  // İki marker arasındaki maksimum mesafe (piksel cinsinden)
+            disableClusteringAtZoom: 17,  // Bu yakınlaştırma düzeyinde ve üstünde clustering'i devre dışı bırak
+            spiderfyOnMaxZoom: true, // En fazla yakınlaştırma seviyesinde örümcek ağına benzer bir açılım yap
+            singleMarkerMode: false,
+            chunkedLoading: true
+        });
 
 	// Haritaya tıklama eylemi
 	/*
@@ -100,7 +107,7 @@
 	function onMarkerClick(e) {
 		latlng = e.latlng;
 
-		var panel = L.Routing.control({
+		routingControl = L.Routing.control({
 			waypoints: [
 				startDest,
 				latlng
@@ -129,7 +136,7 @@
 			collapsible: true,
 			collapsed: true
 		}).addTo(map);
-		panel.hide();
+		routingControl.hide();
 	}
 
 	// Dizideki her markerı MarkerClusterGroup'a ekle
