@@ -33,7 +33,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MainActivity extends AppCompatActivity implements LocationListener {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;
     private static final int GPS_ENABLE_REQUEST = 102;
-    private LocationManager locationManager;
+    private static LocationManager locationManager;
 
     @SuppressLint("StaticFieldLeak")
     protected static WebView mapView;
@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         });
         meTriggerJS.setOnClickListener(v -> {
+            checkPermissionsAndStart();
             if (dLocationLatitude>0 && dLocationLongitude>0){
                 mapView.loadUrl("javascript:getShowLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
             }
@@ -155,18 +156,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         databaseHelper(dbHelper);
 
-        dialog = new BottomSheetDialog(MainActivity.this,R.style.Theme_TezUygulamasi);
+        dialog = new BottomSheetDialog(this);
         mapView.addJavascriptInterface(new WebAppInterface(this,dialog,mapView), "Android");
     }
 
 // ---------------------------------- GPS ----------------------------------
     private void requestLocationUpdates() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = location -> {
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-            mapView.loadUrl("javascript:receiveLocation(" + latitude + "," + longitude + ")");
-        };
+        LocationListener locationListener = location -> mapView.loadUrl("javascript:receiveLocation(" + location.getLatitude() + "," + location.getLongitude() + ")");
 
         try {
             // Konum güncellemelerini başlat

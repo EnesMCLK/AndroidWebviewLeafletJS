@@ -8,8 +8,12 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BottomSheet extends BottomSheetDialogFragment {
+    private LocationManager locationManager;
 
     protected View view;
     private WebAppInterface webAppInterface;
@@ -58,6 +63,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
             mSiraNo = getArguments().getString("data_key");
             mSiraNo = String.valueOf(mSiraNo);
         }
+
         mapView = MainActivity.mapView;
         webAppInterface = new WebAppInterface(getContext(),mapView);
     }
@@ -76,6 +82,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
         dbhelper = new DatabaseHelper(getContext());
         String X = String.valueOf(dbhelper.getX(mSiraNo).get(0));
         String Y = String.valueOf(dbhelper.getY(mSiraNo).get(0));
+        double dX = Double.parseDouble(dbhelper.getX(mSiraNo).get(0));
+        double dY = Double.parseDouble(dbhelper.getY(mSiraNo).get(0));
 
         view = view.findViewById(R.id.modalBottomSheetContainer);
         baslik = view.findViewById(R.id.baslik);
@@ -83,11 +91,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         btnRoute = view.findViewById(R.id.btnRoute);
 
         btnRoute.setOnClickListener(v -> webAppInterface.setEndDest(X,Y));
-        btnRoute.setOnLongClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + X + "," + Y));
-            startActivity(intent);
-            return true;
-        });
+        btnRoute.setOnLongClickListener(v -> { showMapOptions(dX,dY); return true; });
 
 
         try {
@@ -153,6 +157,48 @@ public class BottomSheet extends BottomSheetDialogFragment {
             Log.e("BottomSheet onViewCreated",String.valueOf(e.getLocalizedMessage()));
         }
     }
+
+    public void showMapOptions(double destLatitude, double destLongitude) {
+        // Hedef için genel geo URI
+        Uri locationUri = Uri.parse("geo:" + destLatitude + "," + destLongitude + "?q=" + destLatitude + "," + destLongitude);
+
+        // Genel intent oluşturma
+        Intent intent = new Intent(Intent.ACTION_VIEW, locationUri);
+
+        // Uyumlu tüm aktiviteleri bulma
+        PackageManager packageManager = getContext().getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+
+        // Özel diyalog için seçenekler listesini oluşturma
+        List<Intent> intentList = new ArrayList<>();
+        for (ResolveInfo resolved : activities) {
+            Intent targetedIntent = new Intent(Intent.ACTION_VIEW);
+            targetedIntent.setData(locationUri);
+            targetedIntent.setPackage(resolved.activityInfo.packageName);
+
+            // Eğer Google Maps ise, yol tarifi modunu etkinleştir
+            if (resolved.activityInfo.packageName.equals("com.google.android.apps.maps")) {
+                targetedIntent.setData(Uri.parse("https://www.google.com/maps/dir//"+destLatitude+","+destLongitude+"/@"+destLatitude+","+destLongitude+",17z?entry=ttu"));
+            }
+
+            intentList.add(targetedIntent);
+        }
+
+        // İntent seçici diyalog oluşturma ve başlatma
+        if (!intentList.isEmpty()) {
+            Intent chooserIntent = Intent.createChooser(intentList.remove(0), "Harita Uygulaması Seçin");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[intentList.size()]));
+            startActivity(chooserIntent);
+        } else {
+            Toast.makeText(getContext(), "Uygun bir harita uygulaması bulunamadı.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /* Eğer Google Maps ise, yol tarifi modunu etkinleştir
+            if (resolved.activityInfo.packageName.equals("com.google.android.apps.maps")) {
+        targetedIntent.setData(Uri.parse("https://www.google.com/maps/dir//"+destLatitude+","+destLongitude+"/@"+destLatitude+","+destLongitude+",17z?entry=ttu"));
+    } */
 
     public String getSiraNo(){
         return this.mSiraNo;
