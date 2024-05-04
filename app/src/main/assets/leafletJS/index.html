@@ -27,6 +27,52 @@
             height: 100%;
             width: 100vw;
         }
+
+		.panel {
+			position: fixed;
+			top: 0;
+			right: -300px; /* Panelin başlangıçta gizli olması için */
+			width: 300px;
+			height: 100%;
+			background-color: #f4f4f4;
+			padding: 20px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			transition: right 0.3s ease; /* Geçiş efekti */
+		}
+
+		.panel.open {
+			right: 0; /* Panelin sağ tarafa kaydırılması */
+		}
+
+		#toggleButton {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			z-index: 9999; /* Panelin üstünde olması için */
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			cursor: pointer;
+			border-radius: 5px;
+		}
+
+		/* Kontrol panelini özelleştirme */
+		.leaflet-control-container .leaflet-routing-container-hide {
+            background-color: #ffffff;
+			width: 38px;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            border-radius: 8px;
+        }
+		.leaflet-routing-icon {
+			display: block;
+			margin: 0 auto;
+		}
+		.leaflet-routing-collapse-btn {
+			position: absolute;
+			margin-right: 10px;
+		}
     </style>
     <script type="text/javascript">
         var hedef = [40.8207,29.9213];
@@ -64,11 +110,15 @@
 	var aLatitude, aLongitude;
 	var latlng;
 	var user;
+	var router;
 	var routingControl;
-	var map = L.map('map').setView([40.7, 29.9], 10);
+	var routeFound = false;
+	var waypoint;
+	var clickedMarker = true;
+	var map = L.map('map',{ zoomControl: false }).setView([40.7, 29.9], 10);
 	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		maxZoom: 20,
-		attribution: '© OpenStreetMap'
+		attribution: '© OSMap'
 	}).addTo(map);
 
 	marker();
@@ -105,38 +155,40 @@
 
 	// Markera tıklama eylemi
 	function onMarkerClick(e) {
-		latlng = e.latlng;
+		if(startDest != undefined){
+			latlng = e.latlng;
+			routingControl = L.Routing.control({
+				waypoints: [
+					startDest,
+					latlng
+				],
+				router: new L.Routing.osrmv1({
+					serviceUrl: `https://router.project-osrm.org/route/v1`,
+					language: 'tr'
+				}),
+				routeWhileDragging: true,
+				createMarker: function(i, waypoint, n) {
+					var marker_icon;
+					if (i === 0) {
+						marker_icon = startIcon;  // Rota başlangıcında kullanılacak ikon
+					} else if (i === n - 1) {
+						marker_icon = electricMarker;    // Rota bitişinde kullanılacak ikon
+					} else {
+						// Ara noktaya tıklanınca yapılacak eylemler
+					}
+					return L.marker(waypoint.latLng, {icon: marker_icon});
+				},
+				collapsible: true,
+				collapsed: true,
+				position: 'topleft',
+				routeWhileDragging: true
+				}).addTo(map);
+			routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
+			routingControl.hide();
+		} else {
+			showAndroidToast("Yönlendirme için konumu açınız.");
+		}
 
-		routingControl = L.Routing.control({
-			waypoints: [
-				startDest,
-				latlng
-			],
-			router: new L.Routing.osrmv1({
-				serviceUrl: `https://router.project-osrm.org/route/v1`,
-				language: 'tr'
-			}),
-			routeWhileDragging: true,
-			createMarker: function(i, waypoint, n) {
-                var marker_icon;
-                if (i === 0) {
-                    marker_icon = startIcon;  // Rota başlangıcında kullanılacak ikon
-                } else if (i === n - 1) {
-                    marker_icon = electricMarker;    // Rota bitişinde kullanılacak ikon
-                } else {
-                    // Ara noktalar için standart ikon kullanılabilir
-                    marker_icon = L.icon({
-                        iconUrl: 'via_icon.png',
-                        iconSize: [25, 41],
-                        iconAnchor: [12, 41]
-                    });
-                }
-                return L.marker(waypoint.latLng, {icon: marker_icon});
-            },
-			collapsible: true,
-			collapsed: true
-		}).addTo(map);
-		routingControl.hide();
 	}
 
 	// Dizideki her markerı MarkerClusterGroup'a ekle
@@ -178,6 +230,7 @@
 
     function receiveLocation(latitude, longitude) {
         console.log("Enlem: " + latitude + ", Boylam: " + longitude);
+		
 
         userLocation = [latitude, longitude];
 
@@ -189,21 +242,35 @@
         } else {
             map.setView(userLocation, 10);
         }
+
+		routingControl.spliceWaypoints(0,1,userLocation);
+		console.log(routingControl.spliceWaypoints(0,1,userLocation) + userLocation);
+
 		startDest = userLocation;
     }
     window.receiveLocation = receiveLocation;
 
-	function showAndroidToast() {
-        Android.showToast(aLatitude);
+	function showAndroidToast(message) {
+        Android.showToast(message);
     }
 
     function showAndroidLog(tag,message){
         Android.showLog(tag,message);
     }
 
-    function receiveData(data) {
-        Android.showToast("Veri alındı: " + data);
-    }
+    function setEndDest(e){
+		if (userLocation !=undefined){
+			routingControl.spliceWaypoints(routingControl.getWaypoints().length - 1, 1, e.latlng);
+			routingControl.hide();
+			
+		}
+	}
+
+	function setMapView(){
+		if (userLocation != undefined){
+			map.setView(userLocation, 10);
+		}
+	}
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ANDROİD KOMUTLARI ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 	// En yakın Marker bulucu
 	function findClosestMarker(clickedLatLng, markers) {
@@ -1469,7 +1536,7 @@
 		marker_1652.on('click',function(e){Android.markerClicked(1652);});
 		markers.push(marker_1652);
 		var marker_1653 = L.marker([40.411109,29.090959], {icon: electricMarker});
-		marker_1653.on('click',function(e){Android.markerClicked(1653);});
+		marker_1653.on('click',function(e){setEndDest(e); Android.markerClicked(1653);});
 		markers.push(marker_1653);
 		var marker_4792 = L.marker([40.423777,29.157833], {icon: electricMarker});
 		marker_4792.on('click',function(e){Android.markerClicked(4792);});

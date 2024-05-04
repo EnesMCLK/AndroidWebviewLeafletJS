@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             checkPermissionsAndStart();
             Log.e("buttonTriggerJS", String.valueOf(dLocationLatitude));
             Log.e("buttonTriggerJS", String.valueOf(dLocationLongitude));
+
             if (dLocationLatitude>0 && dLocationLongitude>0){
                 mapView.loadUrl("javascript:receiveLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
             }
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         try {
             // Konum güncellemelerini başlat
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 5F, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 2F, this);
         } catch (SecurityException e) {
             e.printStackTrace();
         }
@@ -217,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView.addJavascriptInterface(new WebAppInterface(this,dialog,mapView), "Android");
         try {
             // Konum güncellemelerini başlat
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 5F, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 2F, this);
         } catch (SecurityException e) {
             e.printStackTrace();
         }
