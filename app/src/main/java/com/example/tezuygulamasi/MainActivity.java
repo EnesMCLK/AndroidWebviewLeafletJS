@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private LocationManager locationManager;
 
     @SuppressLint("StaticFieldLeak")
-    protected WebView mapView;
+    protected static WebView mapView;
     protected FloatingActionButton buttonTriggerJS, meTriggerJS;
     protected BottomSheetDialog dialog;
     protected BottomSheet bottomSheet;

@@ -5,6 +5,8 @@ import static com.example.tezuygulamasi.Soket.getTvGuc_kW;
 import static com.example.tezuygulamasi.Soket.getTvSoketTuru;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,8 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,12 +33,14 @@ import java.util.List;
 public class BottomSheet extends BottomSheetDialogFragment {
 
     protected View view;
+    private WebAppInterface webAppInterface;
     private List<String> mData,mBaslik,mMarka,mSarjAgiIsletmecisi,mYesilSarj,mAdres,mSoketNo,mSoketTipi,mSoketTuru,mSoketGucu,mX,mY;
     private String mSiraNo;
     private TextView baslik,marka;
     private Button btnRoute;
     private DatabaseHelper dbhelper;
     private RecyclerView recyclerView;
+    private WebView mapView;
 
     public static BottomSheet newInstance(String data) {
         BottomSheet fragment = new BottomSheet();
@@ -51,6 +58,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
             mSiraNo = getArguments().getString("data_key");
             mSiraNo = String.valueOf(mSiraNo);
         }
+        mapView = MainActivity.mapView;
+        webAppInterface = new WebAppInterface(getContext(),mapView);
     }
 
     @Override
@@ -73,6 +82,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
         marka = view.findViewById(R.id.marka);
         btnRoute = view.findViewById(R.id.btnRoute);
 
+        btnRoute.setOnClickListener(v -> webAppInterface.setEndDest(X,Y));
         btnRoute.setOnLongClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + X + "," + Y));
             startActivity(intent);
@@ -196,5 +206,49 @@ public class BottomSheet extends BottomSheetDialogFragment {
     public List<String> SoketGucu(){
         mSoketGucu = dbhelper.getSoketGucu(mSiraNo);
         return mSoketGucu;
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    public class WebAppInterface {
+        Context mContext;
+        Dialog mDialog;
+        DatabaseHelper dbHelper;
+        String siraNo;
+        TextView mbsTextView;
+        WebView mWebView;
+
+        WebAppInterface(Context context, WebView webView) {
+            mContext = getContext();
+            mWebView = mapView;
+            dbHelper = new DatabaseHelper(context.getApplicationContext());
+        }
+        @JavascriptInterface
+        public void markerClicked(String siraNo) {
+            this.siraNo = siraNo;
+        }
+        @JavascriptInterface
+        public void sendLocation(double latitude, double longitude) {
+            mWebView.loadUrl("javascript:receiveLocation(" + latitude + "," + longitude + ")");
+            Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
+        }
+        @JavascriptInterface
+        public void setEndDest(String latitude, String longitude) {
+            mWebView.loadUrl("javascript:setEndDest(" + latitude + "," + longitude + ")");
+            Log.e("setEndDest","Latitude: "+latitude+", Longitude: "+longitude);
+        }
+        @JavascriptInterface
+        public void showLocation(double latitude, double longitude) {
+            mWebView.loadUrl("javascript:getShowLocation(" + latitude + "," + longitude + ")");
+            Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
+        }
+        @JavascriptInterface
+        public void showLog(String tag, String message) {
+            // WebView'den gelen mesajı Log mesajı olarak göster
+            Log.e("Webview "+tag,message);
+        }
+        @JavascriptInterface
+        public void showToast(String toast) {
+            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+        }
     }
 }
