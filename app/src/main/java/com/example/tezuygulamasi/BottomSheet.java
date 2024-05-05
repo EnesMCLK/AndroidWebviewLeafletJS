@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -35,8 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BottomSheet extends BottomSheetDialogFragment {
-    private LocationManager locationManager;
-
     protected View view;
     private WebAppInterface webAppInterface;
     private List<String> mData,mBaslik,mMarka,mSarjAgiIsletmecisi,mYesilSarj,mAdres,mSoketNo,mSoketTipi,mSoketTuru,mSoketGucu,mX,mY;
@@ -190,12 +187,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
             Toast.makeText(getContext(), "Uygun bir harita uygulaması bulunamadı.", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-    /* Eğer Google Maps ise, yol tarifi modunu etkinleştir
-            if (resolved.activityInfo.packageName.equals("com.google.android.apps.maps")) {
-        targetedIntent.setData(Uri.parse("https://www.google.com/maps/dir//"+destLatitude+","+destLongitude+"/@"+destLatitude+","+destLongitude+",17z?entry=ttu"));
-    } */
 
     public String getSiraNo(){
         return this.mSiraNo;
