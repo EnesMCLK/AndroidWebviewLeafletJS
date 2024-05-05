@@ -160,7 +160,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
     public void showMapOptions(double destLatitude, double destLongitude) {
         // Hedef için genel geo URI
-        Uri locationUri = Uri.parse("geo:" + destLatitude + "," + destLongitude + "?q=" + destLatitude + "," + destLongitude);
+        Uri locationUri = Uri.parse("geo:" + destLatitude + "," + destLongitude);
 
         // Genel intent oluşturma
         Intent intent = new Intent(Intent.ACTION_VIEW, locationUri);
@@ -175,16 +175,13 @@ public class BottomSheet extends BottomSheetDialogFragment {
             Intent targetedIntent = new Intent(Intent.ACTION_VIEW);
             targetedIntent.setData(locationUri);
             targetedIntent.setPackage(resolved.activityInfo.packageName);
-
             // Eğer Google Maps ise, yol tarifi modunu etkinleştir
             if (resolved.activityInfo.packageName.equals("com.google.android.apps.maps")) {
                 targetedIntent.setData(Uri.parse("https://www.google.com/maps/dir//"+destLatitude+","+destLongitude+"/@"+destLatitude+","+destLongitude+",17z?entry=ttu"));
             }
-
             intentList.add(targetedIntent);
         }
-
-        // İntent seçici diyalog oluşturma ve başlatma
+        // Intent seçici diyalog oluşturma ve başlatma
         if (!intentList.isEmpty()) {
             Intent chooserIntent = Intent.createChooser(intentList.remove(0), "Harita Uygulaması Seçin");
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[intentList.size()]));

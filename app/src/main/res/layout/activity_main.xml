@@ -18,6 +18,24 @@
         </WebView>
     </RelativeLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mShortRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/white"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:contentDescription="@string/todo"
+        android:focusable="true"
+        android:foregroundGravity="bottom|right"
+        android:tintMode="multiply"
+        app:layout_constraintBottom_toTopOf="@+id/mMe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/route"
+        tools:ignore="MissingConstraints" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/mMe"
@@ -45,6 +63,7 @@
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:background="@color/white"
         android:backgroundTint="@color/white"
         android:clickable="true"
         android:contentDescription="@string/todo"

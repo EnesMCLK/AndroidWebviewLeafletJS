@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @SuppressLint("StaticFieldLeak")
     protected static WebView mapView;
-    protected FloatingActionButton buttonTriggerJS, meTriggerJS;
+    protected FloatingActionButton buttonTriggerJS, meTriggerJS, shortRoute;
     protected BottomSheetDialog dialog;
     protected BottomSheet bottomSheet;
     protected View view;
@@ -86,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
         }
         @JavascriptInterface
+        public void findClosestMarker() {
+            mWebView.loadUrl("javascript:findClosestMarker()");
+        }
+        @JavascriptInterface
         public void showLocation(double latitude, double longitude) {
             mWebView.loadUrl("javascript:getShowLocation(" + latitude + "," + longitude + ")");
             Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
@@ -130,11 +134,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 mapView.loadUrl("javascript:getShowLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
             }
         });
-
-    }
-
-    public WebView getWebView(){
-        return mapView;
+        shortRoute.setOnClickListener(v -> {
+            if (dLocationLatitude>0 && dLocationLongitude>0){
+                mapView.loadUrl("javascript:findClosestMarker()");
+            }
+        });
     }
 
 // ---------------------------------- ACTIVITY LIFE CYCLE ----------------------------------
@@ -147,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView = findViewById(R.id.mapview);
         buttonTriggerJS = findViewById(R.id.mButton);
         meTriggerJS = findViewById(R.id.mMe);
+        shortRoute = findViewById(R.id.mShortRoute);
 
 
         cmapView(mapView,buttonTriggerJS);
