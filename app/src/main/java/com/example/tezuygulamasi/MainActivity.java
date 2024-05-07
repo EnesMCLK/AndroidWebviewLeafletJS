@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 // ---------------------------------- DATABASE ----------------------------------
     protected void databaseHelper(DatabaseHelper databaseHelper){
-        // copyDatabase() metodu ile veritabanını hafızaya kopyala.
+        // copyDatabase() fonksiyonu ile veritabanını hafızaya kopyala ve hafıza üzerinden çalıştır
         try {
             databaseHelper.copyDatabase();
             Log.e("DATABASE","Veritabanı kopyalandı.");
@@ -124,36 +124,43 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
 // ---------------------------------- METODLAR ----------------------------------
-    protected void cmapView (WebView mapView, FloatingActionButton buttonTriggerJS){
+    protected void cMapView (WebView mapView, FloatingActionButton buttonTriggerJS){
         mapView.getSettings().setJavaScriptEnabled(true);
         mapView.getSettings().setDomStorageEnabled(true);
         mapView.loadUrl(file+"index.html");
         buttonTriggerJS.setOnClickListener(v -> {
+            // Konum tuşuna tıklanıldığında izinleri kontrol et ve başlat
             checkPermissionsAndStart();
-            if (dLocationLatitude>0 && dLocationLongitude>0){
+            if (dLocationLatitude>0 && dLocationLongitude>0){   // Konum bilgilerine ulaşıldığı takdirde
+                // Webview'e gönder ve kullanıcının konumunu güncelle ve eski konuma ait kullanıcıları temizle
                 mapView.loadUrl("javascript:receiveLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
             }
         });
         meTriggerJS.setOnClickListener(v -> {
+            // İmge tuşuna tıklanıldığında izinleri kontrol et ve başlat
             checkPermissionsAndStart();
+            // Konum bilgilerine ulaşıldığı takdirde
             if (dLocationLatitude>0 && dLocationLongitude>0){
+                // Webview'de kullanıcının konumunu getir ve göster
                 mapView.loadUrl("javascript:getShowLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
             }
         });
         shortRoute.setOnClickListener(v -> {
+            // Konum bilgilerine ulaşıldığı takdirde
             if (dLocationLatitude>0 && dLocationLongitude>0){
+                // Webview' de en kısa yol fonksiyonunu çalıstır
                 mapView.loadUrl("javascript:findClosestMarker()");
             }
         });
     }
     protected void runOnceShowUserLocation() {
-            if (!isExecuted) {
-                // Bu metod yalnızca bir kere çalışır.
-                webAppInterface.showUserLocation(dLocationLatitude,dLocationLongitude);
-                isExecuted = true; // Metodu çalıştı olarak işaretle.
-                meTriggerJS.show();
-                shortRoute.show();
-            }
+        // Çalışmışsa çalıştırma çünkü bu metod yalnızca bir kere çalışır
+        if (!isExecuted) {
+            webAppInterface.showUserLocation(dLocationLatitude,dLocationLongitude);
+            isExecuted = true;  // Metodu çalıştı olarak işaretle
+            meTriggerJS.show(); // İmge tuşunu görünür yap
+            shortRoute.show();  // En kısa yol tuşunu görünür yap
+        }
     }
 
 // ---------------------------------- ACTIVITY LIFE CYCLE ----------------------------------
@@ -165,13 +172,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         mapView = findViewById(R.id.mapview);
         buttonTriggerJS = findViewById(R.id.mButton);
-        meTriggerJS = findViewById(R.id.mMe);
-        meTriggerJS.hide();
-        shortRoute = findViewById(R.id.mShortRoute);
-        shortRoute.hide();
+        meTriggerJS = findViewById(R.id.mMe); meTriggerJS.hide();
+        shortRoute = findViewById(R.id.mShortRoute); shortRoute.hide();
 
-
-        cmapView(mapView,buttonTriggerJS);
+        cMapView(mapView,buttonTriggerJS);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         startLocationUpdates();
 
