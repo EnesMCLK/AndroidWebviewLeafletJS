@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @SuppressLint("StaticFieldLeak")
     protected static WebView mapView;
     protected FloatingActionButton buttonTriggerJS, meTriggerJS, shortRoute;
-    private boolean isExecuted = false;
+    private boolean isExecuted = false; // İlk çalıştırma kontrolü
+    private boolean isFirstTimeLocationAsking = true;  // İlk izin isteği kontrolü
     protected BottomSheetDialog dialog;
     protected BottomSheet bottomSheet;
     protected View view;
@@ -196,12 +197,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 checkLocationEnabled();
             } else {
                 // İzin reddedildi, kullanıcıya açıklama yap ve tekrar izin iste
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION)) {
-                    // Kullanıcı izni reddetti ancak tekrar sorma seçeneği kapalı değil, açıklama göster ve tekrar izin iste
-                    showRationaleDialog("Konum İzni Gerekli", "Bu uygulama, belirli özellikler için konum iznine ihtiyaç duymaktadır. Lütfen izin verin.");
+                if (!isFirstTimeLocationAsking) {
+                    isFirstTimeLocationAsking = false;
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION)) {
+                        showRationaleDialog("Konum İzni Gerekli", "Bu uygulama, belirli özellikler için konum iznine ihtiyaç duymaktadır. Lütfen izin verin.");
+                    }
                 } else {
-                    // Kullanıcı 'bir daha sorma' seçeneğini işaretledi, uygulamanın konum özelliğini kullanamayacağını bildir
-                    showRationaleDialog("Konum İzni Gerekli", "Bu uygulama, belirli özellikler için konum iznine ihtiyaç duymaktadır. Uygulama ayarlarından konum izinlerini aktifleştirin.");
+                    // İzin ikinci kez reddedildi, işlemi durdur
+                    Toast.makeText(this, "Konum izni reddedildi, uygulama sınırlı işlevsellikle çalışacak.", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -210,11 +213,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("İzin Ver", (dialog, which) -> {
-                    // Kullanıcıyı ikna ettikten sonra izni tekrar iste
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-                })
-                .setNegativeButton("İptal", (dialog, which) -> dialog.dismiss())
+                .setPositiveButton("İzin Ver", (dialog, which) -> ActivityCompat.requestPermissions(MainActivity.this, new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE))
+                .setNegativeButton("Reddet", (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
     }
@@ -230,8 +230,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
 
         if (dLocationLatitude>0 && dLocationLongitude>0){ runOnceShowUserLocation(); }
-
-        Log.e("GPS","Latitude:"+dLocationLatitude+" Longitude:"+dLocationLongitude);
     }
     private void checkPermissionsAndStart() {
         if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
