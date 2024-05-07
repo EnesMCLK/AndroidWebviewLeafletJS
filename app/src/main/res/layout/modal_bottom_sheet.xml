@@ -62,7 +62,6 @@
                 android:text="@string/route"
                 android:textColor="@color/p_mavisi"
                 android:background="@drawable/rounded_button">
-
             </Button>
         </LinearLayout>
     </LinearLayout>
