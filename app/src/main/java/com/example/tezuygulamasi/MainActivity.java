@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // Çalışmışsa çalıştırma çünkü bu metod yalnızca bir kere çalışır
         if (!isExecuted) {
             webAppInterface.showUserLocation(dLocationLatitude,dLocationLongitude);
+            Toast.makeText(this,"Konum bilgisine erişildi ve konum gösterildi",Toast.LENGTH_SHORT).show();
             isExecuted = true;  // Metodu çalıştı olarak işaretle
             meTriggerJS.show(); // İmge tuşunu görünür yap
             shortRoute.show();  // En kısa yol tuşunu görünür yap
