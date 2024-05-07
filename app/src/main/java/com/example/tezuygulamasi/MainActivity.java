@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @SuppressLint("StaticFieldLeak")
     protected static WebView mapView;
     protected FloatingActionButton buttonTriggerJS, meTriggerJS, shortRoute;
+    private boolean isExecuted = false;
     protected BottomSheetDialog dialog;
     protected BottomSheet bottomSheet;
     protected View view;
@@ -67,10 +68,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             dbHelper = new DatabaseHelper(context.getApplicationContext());
         }
         @JavascriptInterface
-        public void showToast(String toast) {
-            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
-        }
-        @JavascriptInterface
         public void markerClicked(String siraNo) {
             this.siraNo = siraNo;
             this.siraNo = getMarkerClicked();
@@ -83,16 +80,28 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         @JavascriptInterface
         public void sendLocation(double latitude, double longitude) {
             mWebView.loadUrl("javascript:receiveLocation(" + latitude + "," + longitude + ")");
-            Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
+        }
+        @JavascriptInterface
+        public void showUserLocation(double latitude, double longitude) {
+            // Webview'de kullanıcının konumunu yakaladığı takdirde göster
+            if (latitude>0 && longitude>0) {
+                mWebView.loadUrl("javascript:showUserLocation(" + latitude + "," + longitude + ")");
+            }
+        }
+        @JavascriptInterface
+        public void getShowLocation(double latitude, double longitude) {
+            // Webview'de kullanıcının konumunu getir ve göster
+            mWebView.loadUrl("javascript:getShowLocation(" + latitude + "," + longitude + ")");
         }
         @JavascriptInterface
         public void findClosestMarker() {
+            // Kullanıcının konumuna en yakın istasyonu bul
             mWebView.loadUrl("javascript:findClosestMarker()");
         }
         @JavascriptInterface
-        public void showLocation(double latitude, double longitude) {
-            mWebView.loadUrl("javascript:getShowLocation(" + latitude + "," + longitude + ")");
-            Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
+        public void showToast(String toast) {
+            // WebView'den gelen Toast mesajını activityde göster
+            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
         }
         @JavascriptInterface
         public void showLog(String tag, String message) {
@@ -121,9 +130,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView.loadUrl(file+"index.html");
         buttonTriggerJS.setOnClickListener(v -> {
             checkPermissionsAndStart();
-            Log.e("buttonTriggerJS", String.valueOf(dLocationLatitude));
-            Log.e("buttonTriggerJS", String.valueOf(dLocationLongitude));
-
             if (dLocationLatitude>0 && dLocationLongitude>0){
                 mapView.loadUrl("javascript:receiveLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
             }
@@ -140,6 +146,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         });
     }
+    protected void runOnceShowUserLocation() {
+            if (!isExecuted) {
+                // Bu metod yalnızca bir kere çalışır.
+                webAppInterface.showUserLocation(dLocationLatitude,dLocationLongitude);
+                isExecuted = true; // Metodu çalıştı olarak işaretle.
+                meTriggerJS.show();
+                shortRoute.show();
+            }
+    }
 
 // ---------------------------------- ACTIVITY LIFE CYCLE ----------------------------------
     @SuppressLint({"SetJavaScriptEnabled", "MissingInflatedId"})
@@ -151,12 +166,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView = findViewById(R.id.mapview);
         buttonTriggerJS = findViewById(R.id.mButton);
         meTriggerJS = findViewById(R.id.mMe);
+        meTriggerJS.hide();
         shortRoute = findViewById(R.id.mShortRoute);
+        shortRoute.hide();
 
 
         cmapView(mapView,buttonTriggerJS);
-        requestLocationUpdates();
-
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        startLocationUpdates();
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         databaseHelper(dbHelper);
@@ -165,18 +182,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapView.addJavascriptInterface(new WebAppInterface(this,dialog,mapView), "Android");
     }
 
-// ---------------------------------- GPS ----------------------------------
-    private void requestLocationUpdates() {
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = location -> mapView.loadUrl("javascript:receiveLocation(" + location.getLatitude() + "," + location.getLongitude() + ")");
-
-        try {
-            // Konum güncellemelerini başlat
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 2F, this);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-    }
+    // ---------------------------------- GPS ----------------------------------
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -215,15 +221,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         dLocationLatitude = location.getLatitude();
         dLocationLongitude = location.getLongitude();
 
+        // Kullanıcıya konum bilgisi gönderme
         webAppInterface = new WebAppInterface(this,dialog,mapView);
         mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
-        mapView.addJavascriptInterface(new WebAppInterface(this,dialog,mapView), "Android");
-        try {
-            // Konum güncellemelerini başlat
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 2F, this);
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
+
+        if (dLocationLatitude>0 && dLocationLongitude>0){ runOnceShowUserLocation(); }
 
         Log.e("GPS","Latitude:"+dLocationLatitude+" Longitude:"+dLocationLongitude);
     }
@@ -249,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
     private void startLocationUpdates() {
         try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5, this);
         } catch (SecurityException e) {
             e.printStackTrace();
         }

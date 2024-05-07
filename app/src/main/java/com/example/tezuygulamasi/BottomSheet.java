@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -162,30 +163,36 @@ public class BottomSheet extends BottomSheetDialogFragment {
         // Genel intent oluşturma
         Intent intent = new Intent(Intent.ACTION_VIEW, locationUri);
 
-        // Uyumlu tüm aktiviteleri bulma
-        PackageManager packageManager = getContext().getPackageManager();
-        List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
-
-        // Özel diyalog için seçenekler listesini oluşturma
-        List<Intent> intentList = new ArrayList<>();
-        for (ResolveInfo resolved : activities) {
-            Intent targetedIntent = new Intent(Intent.ACTION_VIEW);
-            targetedIntent.setData(locationUri);
-            targetedIntent.setPackage(resolved.activityInfo.packageName);
-            // Eğer Google Maps ise, yol tarifi modunu etkinleştir
-            if (resolved.activityInfo.packageName.equals("com.google.android.apps.maps")) {
-                targetedIntent.setData(Uri.parse("https://www.google.com/maps/dir//"+destLatitude+","+destLongitude+"/@"+destLatitude+","+destLongitude+",17z?entry=ttu"));
-            }
-            intentList.add(targetedIntent);
-        }
-        // Intent seçici diyalog oluşturma ve başlatma
-        if (!intentList.isEmpty()) {
-            Intent chooserIntent = Intent.createChooser(intentList.remove(0), "Harita Uygulaması Seçin");
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[intentList.size()]));
-            startActivity(chooserIntent);
+        // Eğer cihaz Huawei ise direkt intenti başlat
+        if (Build.MANUFACTURER.equalsIgnoreCase("Huawei")) {
+            startActivity(intent);
         } else {
-            Toast.makeText(getContext(), "Uygun bir harita uygulaması bulunamadı.", Toast.LENGTH_SHORT).show();
+            // Uyumlu tüm aktiviteleri bulma
+            PackageManager packageManager = getContext().getPackageManager();
+            List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+
+            // Özel diyalog için seçenekler listesini oluşturma
+            List<Intent> intentList = new ArrayList<>();
+            for (ResolveInfo resolved : activities) {
+                Intent targetedIntent = new Intent(Intent.ACTION_VIEW);
+                targetedIntent.setData(locationUri);
+                targetedIntent.setPackage(resolved.activityInfo.packageName);
+                // Eğer Google Maps ise, yol tarifi modunu etkinleştir
+                if (resolved.activityInfo.packageName.equals("com.google.android.apps.maps")) {
+                    targetedIntent.setData(Uri.parse("https://www.google.com/maps/dir//"+destLatitude+","+destLongitude+"/@"+destLatitude+","+destLongitude+",17z?entry=ttu"));
+                }
+                intentList.add(targetedIntent);
+            }
+            // Intent seçici diyalog oluşturma ve başlatma
+            if (!intentList.isEmpty()) {
+                Intent chooserIntent = Intent.createChooser(intentList.remove(0), "Harita Uygulaması Seçin");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[intentList.size()]));
+                startActivity(chooserIntent);
+            } else {
+                Toast.makeText(getContext(), "Uygun bir harita uygulaması bulunamadı.", Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 
     public String getSiraNo(){
