@@ -61,7 +61,7 @@
                 android:layout_gravity="center"
                 android:text="@string/route"
                 android:textColor="@color/p_mavisi"
-                tools:ignore="TextContrastCheck">
+                android:background="@drawable/rounded_button">
 
             </Button>
         </LinearLayout>

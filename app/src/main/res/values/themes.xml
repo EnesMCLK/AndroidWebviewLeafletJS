@@ -1,8 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.TezUygulamasi" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.TezUygulamasi" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/p_mavisi</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 
     <style name="Theme.TezUygulamasi" parent="Base.Theme.TezUygulamasi">
