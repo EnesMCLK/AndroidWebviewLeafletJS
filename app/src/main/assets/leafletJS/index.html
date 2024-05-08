@@ -148,9 +148,8 @@
 
 	function showUserLocation(latitude, longitude){
 		userLocation = [latitude, longitude];
-		map.setView(userLocation, 15);
-		user = L.marker(userLocation, {icon: circleIcon}).addTo(map).bindPopup();
 		routingControl.spliceWaypoints(0,1,userLocation);
+        map.closePopup(user);
 	}
 
 	function showAndroidToast(message) {
@@ -171,10 +170,12 @@
 		}
 	}
 
-	function setMapView(){
-		if (userLocation != undefined){
-			map.setView(userLocation, 10);
-		}
+	function setMapView(latitude, longitude){
+		userLocation = [latitude, longitude];
+		user = L.marker(userLocation, {icon: circleIcon}).addTo(map).bindPopup();
+		map.setView(userLocation, 15);
+		routingControl.spliceWaypoints(0,1,userLocation);
+		map.closePopup(user);
 	}
 
 	// En yakın Marker bulucu

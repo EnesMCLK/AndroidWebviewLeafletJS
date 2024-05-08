@@ -1,5 +1,6 @@
 package com.example.tezuygulamasi;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import android.annotation.SuppressLint;
@@ -86,18 +87,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         public void showUserLocation(double latitude, double longitude) {
             // Webview'de kullanıcının konumunu yakaladığı takdirde göster
             if (latitude>0 && longitude>0) {
-                mWebView.loadUrl("javascript:showUserLocation(" + latitude + "," + longitude + ")");
+                mWebView.loadUrl("javascript:showUserLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
             }
         }
         @JavascriptInterface
         public void getShowLocation(double latitude, double longitude) {
             // Webview'de kullanıcının konumunu getir ve göster
-            mWebView.loadUrl("javascript:getShowLocation(" + latitude + "," + longitude + ")");
+            mWebView.loadUrl("javascript:getShowLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
         }
         @JavascriptInterface
         public void findClosestMarker() {
             // Kullanıcının konumuna en yakın istasyonu bul
             mWebView.loadUrl("javascript:findClosestMarker()");
+        }
+        @JavascriptInterface
+        public void setMapView(double latitude, double longitude) {
+            // Kullanıcının konumuna en yakın istasyonu bul
+            mWebView.loadUrl("javascript:setMapView(" + strLocationLatitude + "," + strLocationLongitude + ")");
         }
         @JavascriptInterface
         public void showToast(String toast) {
@@ -134,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             checkPermissionsAndStart();
             if (dLocationLatitude>0 && dLocationLongitude>0){   // Konum bilgilerine ulaşıldığı takdirde
                 // Webview'e gönder ve kullanıcının konumunu güncelle ve eski konuma ait kullanıcıları temizle
-                mapView.loadUrl("javascript:receiveLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
+                mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
             }
         });
         meTriggerJS.setOnClickListener(v -> {
@@ -143,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             // Konum bilgilerine ulaşıldığı takdirde
             if (dLocationLatitude>0 && dLocationLongitude>0){
                 // Webview'de kullanıcının konumunu getir ve göster
-                mapView.loadUrl("javascript:getShowLocation(" + dLocationLatitude + "," + dLocationLongitude + ")");
+                mapView.loadUrl("javascript:getShowLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
             }
         });
         shortRoute.setOnClickListener(v -> {
@@ -157,11 +163,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void runOnceShowUserLocation() {
         // Çalışmışsa çalıştırma çünkü bu metod yalnızca bir kere çalışır
         if (!isExecuted) {
-            webAppInterface.showUserLocation(dLocationLatitude,dLocationLongitude);
-            Toast.makeText(this,"Konum bilgisine erişildi ve konum gösterildi",Toast.LENGTH_SHORT).show();
-            isExecuted = true;  // Metodu çalıştı olarak işaretle
-            meTriggerJS.show(); // İmge tuşunu görünür yap
-            shortRoute.show();  // En kısa yol tuşunu görünür yap
+            if (dLocationLatitude>0 && dLocationLongitude>0) {
+                webAppInterface.setMapView(dLocationLatitude,dLocationLongitude);
+                isExecuted = true;  // Metodu çalıştı olarak işaretle
+                meTriggerJS.show(); // İmge tuşunu görünür yap
+                shortRoute.show();  // En kısa yol tuşunu görünür yap
+            }
         }
     }
 
@@ -185,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         databaseHelper(dbHelper);
 
         dialog = new BottomSheetDialog(this);
+        webAppInterface = new WebAppInterface(this,dialog,mapView);
         mapView.addJavascriptInterface(new WebAppInterface(this,dialog,mapView), "Android");
     }
 
@@ -200,7 +208,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 // İzin reddedildi, kullanıcıya açıklama yap ve tekrar izin iste
                 if (!isFirstTimeLocationAsking) {
                     isFirstTimeLocationAsking = false;
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION)) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION) &&
+                            ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_COARSE_LOCATION)) {
                         showRationaleDialog("Konum İzni Gerekli", "Bu uygulama, belirli özellikler için konum iznine ihtiyaç duymaktadır. Lütfen izin verin.");
                     }
                 } else {
@@ -219,7 +228,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 .create()
                 .show();
     }
-    @SuppressLint("SetTextI18n")
     public void onLocationChanged(Location location) {
         strLocationLatitude = String.valueOf(location.getLatitude());
         strLocationLongitude = String.valueOf(location.getLongitude());
@@ -227,17 +235,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         dLocationLongitude = location.getLongitude();
 
         // Kullanıcıya konum bilgisi gönderme
-        webAppInterface = new WebAppInterface(this,dialog,mapView);
         mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
 
         if (dLocationLatitude>0 && dLocationLongitude>0){ runOnceShowUserLocation(); }
     }
     private void checkPermissionsAndStart() {
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // Konum izinlerini kontrol et
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // İzin iste
-            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
-            // İzinler verilmiş, konum servislerinin açık olup olmadığını kontrol et
+            // İzinler verilmiş ise konum servislerinin açık olup olmadığını kontrol et
             checkLocationEnabled();
         }
     }
