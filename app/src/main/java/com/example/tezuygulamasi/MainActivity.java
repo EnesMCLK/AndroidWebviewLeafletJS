@@ -96,6 +96,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             mWebView.loadUrl("javascript:getShowLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
         }
         @JavascriptInterface
+        public void receiveLocation(double latitude, double longitude) {
+            // Webview'de kullanıcının konumunu güncelle
+            mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
+        }
+        @JavascriptInterface
         public void findClosestMarker() {
             // Kullanıcının konumuna en yakın istasyonu bul
             mWebView.loadUrl("javascript:findClosestMarker()");
@@ -223,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("İzin Ver", (dialog, which) -> ActivityCompat.requestPermissions(MainActivity.this, new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE))
+                .setPositiveButton("İzin Ver", (dialog, which) -> ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE))
                 .setNegativeButton("Reddet", (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
@@ -235,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         dLocationLongitude = location.getLongitude();
 
         // Kullanıcıya konum bilgisi gönderme
-        mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
+        webAppInterface.showUserLocation(dLocationLatitude,dLocationLongitude);
 
         if (dLocationLatitude>0 && dLocationLongitude>0){ runOnceShowUserLocation(); }
     }

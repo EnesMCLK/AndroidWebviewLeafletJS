@@ -148,6 +148,7 @@
 
 	function showUserLocation(latitude, longitude){
 		userLocation = [latitude, longitude];
+		user = L.marker(userLocation, {icon: circleIcon}).addTo(map).bindPopup();
 		routingControl.spliceWaypoints(0,1,userLocation);
         map.closePopup(user);
 	}
