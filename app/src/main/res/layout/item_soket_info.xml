@@ -5,54 +5,31 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:id="@+id/cvLayout">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="#FFFFFF">
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
             tools:ignore="UseCompoundDrawables,UselessParent">
-                <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/baseline_electrical_services_24"
-                        tools:ignore="ContentDescription,ImageContrastCheck">
-                    </ImageView>
-
-                    <TextView
-                        android:id="@+id/tvGuc_kW"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:hint="@string/guc_kw"
-                        android:textColor="@color/p_mavisi"
-                        android:textColorHint="#757575"
-                        android:textSize="12sp">
-
-                    </TextView>
-            </LinearLayout>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imgSoketTip"
+                android:id="@+id/imgSoketTuru"
                 android:src="@mipmap/ac_type2"
                 android:scaleType="fitXY"
                 android:layout_gravity="center"
                 android:importantForAccessibility="no">
             </ImageView>
-
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
             <TextView
                 android:id="@+id/tvSoketTuru"
                 android:layout_width="wrap_content"
@@ -61,8 +38,26 @@
                 android:hint="@string/ac_type2"
                 android:textColor="@color/black"
                 android:textColorHint="#757575"
-                android:textSize="9sp"
-                tools:ignore="SmallSp">
+                android:textSize="14sp">
+            </TextView>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:src="@drawable/baseline_electrical_services_24"
+                tools:ignore="ContentDescription,ImageContrastCheck">
+            </ImageView>
+            <TextView
+                android:id="@+id/tvGuc_kW"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="center"
+                android:hint="@string/guc_kw"
+                android:textColor="@color/p_mavisi"
+                android:textColorHint="#757575"
+                android:textSize="12sp">
             </TextView>
         </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.example.tezuygulamasi;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,18 +11,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class SoketAdapter extends RecyclerView.Adapter<SoketAdapter.SoketHolder> {
 
-    ArrayList<Soket> soketArrayList;
     LayoutInflater inflater;
-    BottomSheet bottomSheet;
+    List<String> soketTuru;
+    List<String> soketGucu;
 
-    public SoketAdapter(ArrayList<Soket> soketArrayList, Context context) {
+    public SoketAdapter(Context context, List<String> soketTuru, List<String> soketGucu) {
         inflater = LayoutInflater.from(context);
-        this.soketArrayList = soketArrayList;
-        bottomSheet = new BottomSheet();
+        this.soketTuru = soketTuru;
+        this.soketGucu = soketGucu;
     }
 
     @NonNull
@@ -32,33 +33,35 @@ public class SoketAdapter extends RecyclerView.Adapter<SoketAdapter.SoketHolder>
         return holder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull SoketHolder holder, int position) {
-        Soket soket =soketArrayList.get(position);
-        holder.setData(soket);
+        holder.tvSoketTuru.setText(soketTuru.get(position));
+        holder.tvGuc_kW.setText(soketGucu.get(position) + " kW");
+        switch (soketTuru.get(position)) {
+            case "AC_TYPE":
+                holder.imgSoketTuru.setImageResource(R.mipmap.ac_type2);
+            case "DC_CCS":
+                holder.imgSoketTuru.setImageResource(R.mipmap.dc_ccs);
+            case "DC_CHADEMO":
+                holder.imgSoketTuru.setImageResource(R.mipmap.dc_chademo);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return soketArrayList.size();
+        return soketTuru.size();
     }
 
     class SoketHolder extends RecyclerView.ViewHolder{
-        TextView tvSoketTip, tvGuc_kW;
-        ImageView imgSoketTip;
+        TextView tvSoketTuru, tvGuc_kW;
+        ImageView imgSoketTuru;
 
         public SoketHolder(@NonNull View itemView) {
             super(itemView);
-            tvSoketTip = itemView.findViewById(R.id.tvSoketTuru);
+            tvSoketTuru = itemView.findViewById(R.id.tvSoketTuru);
             tvGuc_kW = itemView.findViewById(R.id.tvGuc_kW);
-            imgSoketTip = itemView.findViewById(R.id.imgSoketTip);
-        }
-
-        public void setData(Soket soket){
-            this.tvSoketTip.setText(Soket.getTvSoketTuru());
-            this.tvGuc_kW.setText(Soket.getTvGuc_kW());
-            this.imgSoketTip.setImageResource(Soket.getImgSoketTuru());
+            imgSoketTuru = itemView.findViewById(R.id.imgSoketTuru);
         }
     }
-
 }
