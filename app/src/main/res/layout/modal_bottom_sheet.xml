@@ -61,11 +61,9 @@
                 android:background="@drawable/rounded_button"
                 android:text="@string/route"
                 android:textColor="#1976D2">
-
             </Button>
         </LinearLayout>
     </LinearLayout>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bsSoketLayout"
         android:layout_width="match_parent"
@@ -76,6 +74,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bsLayout"
         tools:ignore="MissingConstraints">
-
     </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>
