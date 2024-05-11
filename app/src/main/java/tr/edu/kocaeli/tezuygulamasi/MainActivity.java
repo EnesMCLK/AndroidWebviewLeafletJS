@@ -1,4 +1,4 @@
-package com.example.tezuygulamasi;
+package tr.edu.kocaeli.tezuygulamasi;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;

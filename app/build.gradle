@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    namespace 'com.example.tezuygulamasi'
+    namespace 'tr.edu.kocaeli.tezuygulamasi'
     //noinspection GradleDependency
     compileSdk 34
 
     defaultConfig {
-        applicationId 'com.example.tezuygulamasi'
+        applicationId 'tr.edu.kocaeli.tezuygulamasi'
         minSdk 27
         //noinspection ExpiredTargetSdkVersion
         targetSdk 32

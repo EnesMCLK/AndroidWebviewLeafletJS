@@ -1,4 +1,4 @@
-package com.example.tezuygulamasi;
+package tr.edu.kocaeli.tezuygulamasi;
 
 import android.content.Context;
 import android.database.Cursor;

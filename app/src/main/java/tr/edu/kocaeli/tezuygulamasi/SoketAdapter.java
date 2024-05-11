@@ -1,4 +1,4 @@
-package com.example.tezuygulamasi;
+package tr.edu.kocaeli.tezuygulamasi;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
