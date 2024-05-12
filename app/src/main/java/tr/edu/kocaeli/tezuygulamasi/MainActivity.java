@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             checkPermissionsAndStart();
             if (dLocationLatitude>0 && dLocationLongitude>0){   // Konum bilgilerine ulaşıldığı takdirde
                 // Webview'e gönder ve kullanıcının konumunu güncelle ve eski konuma ait kullanıcıları temizle
-                mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
+                webAppInterface.receiveLocation(dLocationLatitude,dLocationLongitude);
             }
         });
         meTriggerJS.setOnClickListener(v -> {
@@ -154,14 +154,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             // Konum bilgilerine ulaşıldığı takdirde
             if (dLocationLatitude>0 && dLocationLongitude>0){
                 // Webview'de kullanıcının konumunu getir ve göster
-                mapView.loadUrl("javascript:getShowLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
+                webAppInterface.getShowLocation(dLocationLatitude,dLocationLongitude);
             }
         });
         shortRoute.setOnClickListener(v -> {
             // Konum bilgilerine ulaşıldığı takdirde
             if (dLocationLatitude>0 && dLocationLongitude>0){
                 // Webview' de en kısa yol fonksiyonunu çalıstır
-                mapView.loadUrl("javascript:findClosestMarker()");
+                webAppInterface.findClosestMarker();
             }
         });
     }
