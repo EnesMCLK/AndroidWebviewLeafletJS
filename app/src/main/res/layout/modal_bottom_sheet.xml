@@ -7,6 +7,7 @@
     android:id="@+id/modalBottomSheetContainer"
     android:background="@drawable/rounded_bottom_sheet_background"
     android:padding="10dp">
+
     <LinearLayout
         android:id="@+id/bsLayout"
         android:layout_width="match_parent"
@@ -17,6 +18,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp">
+
         <LinearLayout
             android:id="@+id/bsInfoLayout"
             android:layout_width="wrap_content"
@@ -35,6 +37,7 @@
                 android:textStyle="bold"
                 android:textColorHint="#757575">
             </TextView>
+
             <TextView
                 android:id="@+id/marka"
                 android:layout_width="match_parent"
@@ -45,6 +48,7 @@
                 android:textColorHint="#757575">
             </TextView>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/bsRouteLayout"
             android:layout_width="wrap_content"
@@ -53,6 +57,7 @@
             android:orientation="vertical"
             android:layout_gravity="end"
             tools:ignore="MissingConstraints">
+
             <Button
                 android:id="@+id/btnRoute"
                 android:layout_width="110dp"
@@ -64,6 +69,7 @@
             </Button>
         </LinearLayout>
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/bsSoketLayout"
         android:layout_width="match_parent"
