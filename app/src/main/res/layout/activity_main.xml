@@ -35,7 +35,7 @@
         app:layout_constraintBottom_toTopOf="@+id/mMe"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/route"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints,DuplicateSpeakableTextCheck" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/mMe"

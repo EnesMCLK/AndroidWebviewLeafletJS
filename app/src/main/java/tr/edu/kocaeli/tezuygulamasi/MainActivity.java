@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @SuppressLint("StaticFieldLeak")
     protected static WebView mapView;
-    protected FloatingActionButton buttonTriggerJS, meTriggerJS, shortRoute;
+    protected FloatingActionButton buttonTriggerJS, meTriggerJS, shortRoute, clearRoute;
     private boolean isExecuted = false; // İlk çalıştırma kontrolü
     private boolean isFirstTimeLocationAsking = true;  // İlk izin isteği kontrolü
     protected BottomSheetDialog dialog;
