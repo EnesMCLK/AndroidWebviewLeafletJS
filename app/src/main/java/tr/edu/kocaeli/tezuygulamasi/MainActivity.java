@@ -148,8 +148,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         buttonTriggerJS.setOnClickListener(v -> {
             // Konum tuşuna tıklanıldığında izinleri kontrol et ve başlat
             checkPermissionsAndStart();
-            if (dLocationLatitude>0 && dLocationLongitude>0){   // Konum bilgilerine ulaşıldığı takdirde
-                // Webview'e gönder ve kullanıcının konumunu güncelle ve eski konuma ait kullanıcıları temizle
+            // Konum bilgilerine ulaşıldığı takdirde
+            if (dLocationLatitude>0 && dLocationLongitude>0){
+                // Webview'e gönder ve kullanıcının konumunu güncelle ve
+                // Eski konuma ait kullanıcı bilgilerini temizle
                 webAppInterface.receiveLocation(dLocationLatitude,dLocationLongitude);
             }
         });
