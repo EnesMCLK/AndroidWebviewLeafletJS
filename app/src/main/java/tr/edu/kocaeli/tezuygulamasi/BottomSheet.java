@@ -139,7 +139,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
                         Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     public List<String> baslik(){
@@ -181,4 +180,4 @@ public class BottomSheet extends BottomSheetDialogFragment {
             Log.e("setEndDest","Latitude: "+latitude+", Longitude: "+longitude);
         }
     }
-}
+} // BottomSheet Yapıcı sınıfı kapanır

@@ -293,4 +293,4 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             e.printStackTrace();
         }
     }
-} // MainActivity sınıfı kapanır
+} // MainActivity yapıcı sınıfı kapanır
