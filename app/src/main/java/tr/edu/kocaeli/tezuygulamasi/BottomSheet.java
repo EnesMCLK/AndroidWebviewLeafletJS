@@ -33,7 +33,7 @@ import java.util.List;
 public class BottomSheet extends BottomSheetDialogFragment {
     protected View view;
     private WebAppInterface webAppInterface;
-    private List<String> mData,mBaslik,mMarka,mSarjAgiIsletmecisi,mYesilSarj,mAdres,mSoketNo,mSoketTipi,mSoketTuru,mSoketGucu,mX,mY;
+    private List<String> mBaslik,mMarka,mSoketTuru,mSoketGucu;
     private String mSiraNo;
     private TextView tvBaslik,tvMarka;
     private Button btnRoute;
@@ -57,7 +57,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
             mSiraNo = getArguments().getString("data_key");
             mSiraNo = String.valueOf(mSiraNo);
         }
-
         mapView = MainActivity.mapView;
         webAppInterface = new WebAppInterface(getContext(),mapView);
     }
@@ -136,15 +135,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
 
     }
 
-    public String getSiraNo(){
-        return this.mSiraNo;
-    }
-
-    public List<String> data(int sutunNo){
-        mData = dbhelper.getData(mSiraNo, sutunNo);
-        return mData;
-    }
-
     public List<String> baslik(){
         mBaslik = dbhelper.getBaslik(mSiraNo);
         return mBaslik;
@@ -154,32 +144,6 @@ public class BottomSheet extends BottomSheetDialogFragment {
         mMarka = dbhelper.getMarka(mSiraNo);
         return mMarka;
     }
-
-    public List<String> sarjAgiIsletmecisi(){
-        mSarjAgiIsletmecisi = dbhelper.getSarjAgiIsletmecisi(mSiraNo);
-        return mSarjAgiIsletmecisi;
-    }
-
-    public List<String> yesilSarj(){
-        mYesilSarj = dbhelper.getYesilSarj(mSiraNo);
-        return mYesilSarj;
-    }
-
-    public List<String> adres(){
-        mAdres = dbhelper.getAdres(mSiraNo);
-        return mAdres;
-    }
-
-    public List<String> soketNo(){
-        mSoketNo = dbhelper.getSoketNo(mSiraNo);
-        return mSoketNo;
-    }
-
-    public List<String> soketTipi(){
-        mSoketTipi = dbhelper.getSoketTipi(mSiraNo);
-        return mSoketTipi;
-    }
-
     public List<String> soketTuru(){
         mSoketTuru = dbhelper.getSoketTuru(mSiraNo);
         return mSoketTuru;
@@ -205,32 +169,9 @@ public class BottomSheet extends BottomSheetDialogFragment {
             dbHelper = new DatabaseHelper(context.getApplicationContext());
         }
         @JavascriptInterface
-        public void markerClicked(String siraNo) {
-            this.siraNo = siraNo;
-        }
-        @JavascriptInterface
-        public void sendLocation(double latitude, double longitude) {
-            mWebView.loadUrl("javascript:receiveLocation(" + latitude + "," + longitude + ")");
-            Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
-        }
-        @JavascriptInterface
         public void setEndDest(String latitude, String longitude) {
             mWebView.loadUrl("javascript:setEndDest(" + latitude + "," + longitude + ")");
             Log.e("setEndDest","Latitude: "+latitude+", Longitude: "+longitude);
-        }
-        @JavascriptInterface
-        public void showLocation(double latitude, double longitude) {
-            mWebView.loadUrl("javascript:getShowLocation(" + latitude + "," + longitude + ")");
-            Log.e("sendLocation","Latitude: "+latitude+", Longitude: "+longitude);
-        }
-        @JavascriptInterface
-        public void showLog(String tag, String message) {
-            // WebView'den gelen mesajı Log mesajı olarak göster
-            Log.e("Webview "+tag,message);
-        }
-        @JavascriptInterface
-        public void showToast(String toast) {
-            Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
         }
     }
 }
