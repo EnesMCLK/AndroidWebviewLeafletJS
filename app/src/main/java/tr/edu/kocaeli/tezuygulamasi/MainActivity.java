@@ -29,7 +29,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-
+// MainActivity Yapıcı Sınıfı
 @SuppressLint("SetJavaScriptEnabled")
 public class MainActivity extends AppCompatActivity implements LocationListener {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;

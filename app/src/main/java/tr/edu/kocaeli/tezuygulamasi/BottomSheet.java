@@ -30,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+// BottomSheet Yapıcı Sınıfı
 public class BottomSheet extends BottomSheetDialogFragment {
     protected View view;
     private WebAppInterface webAppInterface;
