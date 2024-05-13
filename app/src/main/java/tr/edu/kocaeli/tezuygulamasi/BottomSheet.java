@@ -62,7 +62,8 @@ public class BottomSheet extends BottomSheetDialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Burada layout'unuzu inflate edin ve myData ile UI'ı güncelleyin
         view = inflater.inflate(R.layout.modal_bottom_sheet, container, false);
         return view;
@@ -119,17 +120,22 @@ public class BottomSheet extends BottomSheetDialogFragment {
                 targetedIntent.setPackage(resolved.activityInfo.packageName);
                 // Eğer Google Maps ise, yol tarifi modunu etkinleştir
                 if (resolved.activityInfo.packageName.equals("com.google.android.apps.maps")) {
-                    targetedIntent.setData(Uri.parse("https://www.google.com/maps/dir//"+destLatitude+","+destLongitude+"/@"+destLatitude+","+destLongitude+",17z?entry=ttu"));
+                    targetedIntent.setData(Uri.parse("https://www.google.com/maps/dir//"+
+                            destLatitude + "," + destLongitude + "/@" + destLatitude + "," +
+                            destLongitude + ",17z?entry=ttu"));
                 }
                 intentList.add(targetedIntent);
             }
             // Intent seçici diyalog oluşturma ve başlatma
             if (!intentList.isEmpty()) {
-                Intent chooserIntent = Intent.createChooser(intentList.remove(0), "Harita Uygulaması Seçin");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[intentList.size()]));
+                Intent chooserIntent = Intent.createChooser(intentList.remove(0),
+                        "Harita Uygulaması Seçin");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                        intentList.toArray(new Parcelable[intentList.size()]));
                 startActivity(chooserIntent);
             } else {
-                Toast.makeText(getContext(), "Uygun bir harita uygulaması bulunamadı.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Uygun bir harita uygulaması bulunamadı.",
+                        Toast.LENGTH_SHORT).show();
             }
         }
 
