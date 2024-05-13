@@ -210,7 +210,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     // ---------------------------------- GPS ----------------------------------
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -220,13 +221,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 // İzin reddedildi, kullanıcıya açıklama yap ve tekrar izin iste
                 if (!isFirstTimeLocationAsking) {
                     isFirstTimeLocationAsking = false;
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION) &&
-                            ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_COARSE_LOCATION)) {
-                        showRationaleDialog("Konum İzni Gerekli", "Bu uygulama, belirli özellikler için konum iznine ihtiyaç duymaktadır. Lütfen izin verin.");
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            ACCESS_FINE_LOCATION) &&
+                            ActivityCompat.shouldShowRequestPermissionRationale(this,
+                                    ACCESS_COARSE_LOCATION)) {
+                        showRationaleDialog("Konum İzni Gerekli", "Bu uygulama, " +
+                                "belirli özellikler için konum iznine ihtiyaç duymaktadır. " +
+                                "Lütfen izin verin.");
                     }
                 } else {
                     // İzin ikinci kez reddedildi, işlemi durdur
-                    Toast.makeText(this, "Konum izni reddedildi, uygulama sınırlı işlevsellikle çalışacak.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Konum izni reddedildi, " +
+                            "uygulama sınırlı işlevsellikle çalışacak.", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -235,7 +241,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("İzin Ver", (dialog, which) -> ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE))
+                .setPositiveButton("İzin Ver", (dialog, which) ->
+                        ActivityCompat.requestPermissions(this, new String[]
+                                {ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE))
                 .setNegativeButton("Reddet", (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
@@ -253,17 +261,21 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
     private void checkPermissionsAndStart() {
         // Konum izinlerini kontrol et
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
             // İzin iste
-            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION,
+                    ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             // İzinler verilmiş ise konum servislerinin açık olup olmadığını kontrol et
             checkLocationEnabled();
         }
     }
     private void checkLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager =
+                (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             // Konum servisleri kapalı, kullanıcıyı ayarlara yönlendir
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -275,7 +287,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
     private void startLocationUpdates() {
         try {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    2000, 5, this);
         } catch (SecurityException e) {
             e.printStackTrace();
         }
