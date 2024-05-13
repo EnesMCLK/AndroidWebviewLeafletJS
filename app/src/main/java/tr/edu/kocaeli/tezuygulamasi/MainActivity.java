@@ -87,18 +87,21 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         public void showUserLocation(double latitude, double longitude) {
             // Webview'de kullanıcının konumunu yakaladığı takdirde göster
             if (latitude>0 && longitude>0) {
-                mWebView.loadUrl("javascript:showUserLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
+                mWebView.loadUrl("javascript:showUserLocation(" + strLocationLatitude + "," +
+                        strLocationLongitude + ")");
             }
         }
         @JavascriptInterface
         public void getShowLocation(double latitude, double longitude) {
             // Webview'de kullanıcının konumunu getir ve göster
-            mWebView.loadUrl("javascript:getShowLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
+            mWebView.loadUrl("javascript:getShowLocation(" + strLocationLatitude + "," +
+                    strLocationLongitude + ")");
         }
         @JavascriptInterface
         public void receiveLocation(double latitude, double longitude) {
             // Webview'de kullanıcının konumunu güncelle
-            mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," + strLocationLongitude + ")");
+            mapView.loadUrl("javascript:receiveLocation(" + strLocationLatitude + "," +
+                    strLocationLongitude + ")");
         }
         @JavascriptInterface
         public void findClosestMarker() {
@@ -108,7 +111,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         @JavascriptInterface
         public void setMapView(double latitude, double longitude) {
             // Kullanıcının konumuna en yakın istasyonu bul
-            mWebView.loadUrl("javascript:setMapView(" + strLocationLatitude + "," + strLocationLongitude + ")");
+            mWebView.loadUrl("javascript:setMapView(" + strLocationLatitude + "," +
+                    strLocationLongitude + ")");
         }
         @JavascriptInterface
         public void showToast(String toast) {
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             // WebView'den gelen mesajı Log mesajı olarak göster
             Log.e("Webview "+tag,message);
         }
-    }
+    } // WebAppInterface sınıfı kapanır
 
 // ---------------------------------- DATABASE ----------------------------------
     protected void databaseHelper(DatabaseHelper databaseHelper){
@@ -133,13 +137,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             e.printStackTrace();
             Log.e("DATABASE","Veritabanırken hata oluştu.");
         }
-    }
+    } // databaseHelper fonksiyonu kapanır
 
 // ---------------------------------- METODLAR ----------------------------------
     protected void cMapView (WebView mapView, FloatingActionButton buttonTriggerJS){
         mapView.getSettings().setJavaScriptEnabled(true);
         mapView.getSettings().setDomStorageEnabled(true);
         mapView.loadUrl(file+"index.html");
+
         buttonTriggerJS.setOnClickListener(v -> {
             // Konum tuşuna tıklanıldığında izinleri kontrol et ve başlat
             checkPermissionsAndStart();
@@ -164,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 webAppInterface.findClosestMarker();
             }
         });
-    }
+    } // cMapView fonksiyonu kapanır
     protected void runOnceShowUserLocation() {
         // Çalışmışsa çalıştırma çünkü bu metod yalnızca bir kere çalışır
         if (!isExecuted) {
@@ -177,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-// ---------------------------------- ACTIVITY LIFE CYCLE ----------------------------------
+// ---------------------------------- ACTIVITY LIFE CYCLE ----------------------------------Z
     @SuppressLint({"SetJavaScriptEnabled", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
