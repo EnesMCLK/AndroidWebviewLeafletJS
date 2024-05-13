@@ -65,7 +65,7 @@ public class BottomSheet extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Burada layout'unuzu inflate edin ve myData ile UI'ı güncelleyin
+        // Layout'u inflate ederek myData ile arayüz güncellenir
         view = inflater.inflate(R.layout.modal_bottom_sheet, container, false);
         return view;
     }
