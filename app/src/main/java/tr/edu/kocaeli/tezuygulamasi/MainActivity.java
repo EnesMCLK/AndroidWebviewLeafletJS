@@ -35,10 +35,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;
     private static final int GPS_ENABLE_REQUEST = 102;
 
-    @SuppressLint("StaticFieldLeak")
-    private static LocationManager locationManager;
+    private static LocationManager locationManager; @SuppressLint("StaticFieldLeak")
     protected View view;
-    protected static WebView mapView;
+
+    protected static WebView mapView; @SuppressLint("StaticFieldLeak")
     protected FloatingActionButton buttonTriggerJS, meTriggerJS, shortRoute, clearRoute;
     private boolean isExecuted = false; // İlk çalıştırma kontrolü
     private boolean isFirstTimeLocationAsking = true;  // İlk izin isteği kontrolü
