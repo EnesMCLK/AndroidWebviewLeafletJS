@@ -140,9 +140,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 // ---------------------------------- METODLAR ----------------------------------
     protected void cMapView (WebView mapView){
-        mapView.getSettings().setJavaScriptEnabled(true);
-        mapView.getSettings().setDomStorageEnabled(true);
-        mapView.loadUrl(file+"index.html");
+        mapView.getSettings().setJavaScriptEnabled(true);   // Javasscript ayarlarını etkinleştir
+        mapView.getSettings().setDomStorageEnabled(true);   // Depolama ayarlarını etkinleştir
+        mapView.loadUrl(file+"index.html");                 // Web sayfasını yükle
 
         buttonTriggerJS.setOnClickListener(v -> {
             // Konum tuşuna tıklanıldığında izinleri kontrol et ve başlat
@@ -191,8 +191,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_main);             // Görünüm oluşturulur
 
         mapView = findViewById(R.id.mapview);                           // WebView görünümü
-        buttonTriggerJS = findViewById(R.id.mButton);                   // Navigasyon düğmesi
-        meTriggerJS = findViewById(R.id.mMe); meTriggerJS.hide();       // İmleç düğmesi
+        buttonTriggerJS = findViewById(R.id.mButton);                   // Konum düğmesi
+        meTriggerJS = findViewById(R.id.mMe); meTriggerJS.hide();       // İmge düğmesi
         shortRoute = findViewById(R.id.mShortRoute); shortRoute.hide(); // En kısa yol düğmesi
 
         cMapView(mapView);                                  // cmapView fonksiyonuna yönlendirir
