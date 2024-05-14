@@ -34,21 +34,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MainActivity extends AppCompatActivity implements LocationListener {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 101;
     private static final int GPS_ENABLE_REQUEST = 102;
-    private static LocationManager locationManager;
 
     @SuppressLint("StaticFieldLeak")
+    private static LocationManager locationManager;
+    protected View view;
     protected static WebView mapView;
     protected FloatingActionButton buttonTriggerJS, meTriggerJS, shortRoute, clearRoute;
     private boolean isExecuted = false; // İlk çalıştırma kontrolü
     private boolean isFirstTimeLocationAsking = true;  // İlk izin isteği kontrolü
     protected BottomSheetDialog dialog;
     protected BottomSheet bottomSheet;
-    protected View view;
-    protected DatabaseHelper data;
+    protected DatabaseHelper data,dbhelper;
     protected String file="file:///android_asset/leafletJS/";
     private String strLocationLatitude, strLocationLongitude;
     private double dLocationLatitude, dLocationLongitude;
-    private DatabaseHelper dbhelper;
     private WebAppInterface webAppInterface;
 
 
