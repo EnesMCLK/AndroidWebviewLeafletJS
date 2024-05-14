@@ -188,23 +188,27 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);             // Görünüm oluşturulur
 
         mapView = findViewById(R.id.mapview);                           // WebView görünümü
         buttonTriggerJS = findViewById(R.id.mButton);                   // Navigasyon düğmesi
         meTriggerJS = findViewById(R.id.mMe); meTriggerJS.hide();       // İmleç düğmesi
         shortRoute = findViewById(R.id.mShortRoute); shortRoute.hide(); // En kısa yol düğmesi
 
-        cMapView(mapView,buttonTriggerJS);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        startLocationUpdates();
+        cMapView(mapView,buttonTriggerJS);                  // cmapView fonksiyonuna yönlendirir
+        locationManager = (LocationManager)
+                getSystemService(Context.LOCATION_SERVICE); // Lokasyon yönetimi tanımlanır
+        startLocationUpdates();                             // Lokasyon servisleri başlatılır
 
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        databaseHelper(dbHelper);
+        DatabaseHelper dbHelper =
+                new DatabaseHelper(this);           // Veritabanı nesnesi oluşturulur
+        databaseHelper(dbHelper);                           // Kopyalanmak üzere sisteme gönderilir
 
-        dialog = new BottomSheetDialog(this);
-        webAppInterface = new WebAppInterface(this,dialog,mapView);
-        mapView.addJavascriptInterface(new WebAppInterface(this,dialog,mapView), "Android");
+        dialog = new BottomSheetDialog(this);               // Alt panel nesnesi oluşturulur
+        webAppInterface =
+                new WebAppInterface(this,dialog,mapView);  // Web arayüzü nesnesi oluşturulur
+        mapView.addJavascriptInterface(new WebAppInterface
+                (this,dialog,mapView), "Android");  // Javascript arayüzüne bağlanılır
     }
 
     // ---------------------------------- GPS ----------------------------------
