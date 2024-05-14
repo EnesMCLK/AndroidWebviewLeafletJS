@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Dialog mDialog;
         DatabaseHelper dbHelper;
         String siraNo;
-        TextView mbsTextView;
         WebView mWebView;
 
         WebAppInterface(Context context, Dialog dialog, WebView webView) {
@@ -109,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
         @JavascriptInterface
         public void setMapView(double latitude, double longitude) {
-            // Kullanıcının konumuna en yakın istasyonu bul
+            // Kullanıcının haritasını ayarla
             mWebView.loadUrl("javascript:setMapView(" + strLocationLatitude + "," +
                     strLocationLongitude + ")");
         }
@@ -166,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         shortRoute.setOnClickListener(v -> {
             // Konum bilgilerine ulaşıldığı takdirde
             if (dLocationLatitude>0 && dLocationLongitude>0){
-                // Webview' de en kısa yol fonksiyonunu çalıstır
+                // Webview' de en yakın işaretçiyi bulma fonksiyonunu çalıstır
                 webAppInterface.findClosestMarker();
             }
         });
