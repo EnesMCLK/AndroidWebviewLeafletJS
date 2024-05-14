@@ -190,10 +190,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mapView = findViewById(R.id.mapview);
-        buttonTriggerJS = findViewById(R.id.mButton);
-        meTriggerJS = findViewById(R.id.mMe); meTriggerJS.hide();
-        shortRoute = findViewById(R.id.mShortRoute); shortRoute.hide();
+        mapView = findViewById(R.id.mapview);                           // WebView görünümü
+        buttonTriggerJS = findViewById(R.id.mButton);                   // Navigasyon düğmesi
+        meTriggerJS = findViewById(R.id.mMe); meTriggerJS.hide();       // İmleç düğmesi
+        shortRoute = findViewById(R.id.mShortRoute); shortRoute.hide(); // En kısa yol düğmesi
 
         cMapView(mapView,buttonTriggerJS);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
