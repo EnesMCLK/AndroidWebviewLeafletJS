@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     } // databaseHelper fonksiyonu kapanır
 
 // ---------------------------------- METODLAR ----------------------------------
-    protected void cMapView (WebView mapView, FloatingActionButton buttonTriggerJS){
+    protected void cMapView (WebView mapView){
         mapView.getSettings().setJavaScriptEnabled(true);
         mapView.getSettings().setDomStorageEnabled(true);
         mapView.loadUrl(file+"index.html");
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-// ---------------------------------- ACTIVITY LIFE CYCLE ----------------------------------Z
+// ---------------------------------- ACTIVITY LIFE CYCLE ----------------------------------
     @SuppressLint({"SetJavaScriptEnabled", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         meTriggerJS = findViewById(R.id.mMe); meTriggerJS.hide();       // İmleç düğmesi
         shortRoute = findViewById(R.id.mShortRoute); shortRoute.hide(); // En kısa yol düğmesi
 
-        cMapView(mapView,buttonTriggerJS);                  // cmapView fonksiyonuna yönlendirir
+        cMapView(mapView);                                  // cmapView fonksiyonuna yönlendirir
         locationManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE); // Lokasyon yönetimi tanımlanır
         startLocationUpdates();                             // Lokasyon servisleri başlatılır
