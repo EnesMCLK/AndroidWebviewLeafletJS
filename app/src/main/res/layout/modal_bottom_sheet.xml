@@ -9,76 +9,83 @@
     android:padding="10dp">
 
     <LinearLayout
-        android:id="@+id/bsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        tools:ignore="MissingConstraints"
-        android:baselineAligned="false"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp">
-
-        <LinearLayout
-            android:id="@+id/bsInfoLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.7"
-            android:orientation="vertical"
-            tools:ignore="MissingConstraints">
-
-            <TextView
-                android:id="@+id/baslik"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/baslik"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textColorHint="#757575">
-            </TextView>
-
-            <TextView
-                android:id="@+id/marka"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/marka"
-                android:textSize="12sp"
-                android:textColor="@color/black"
-                android:textColorHint="#757575">
-            </TextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/bsRouteLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:orientation="vertical"
-            android:layout_gravity="end"
-            tools:ignore="MissingConstraints">
-
-            <Button
-                android:id="@+id/btnRoute"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/rounded_button"
-                android:text="@string/route"
-                android:textColor="#1976D2">
-            </Button>
-        </LinearLayout>
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/bsSoketLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bsLayout"
-        tools:ignore="MissingConstraints">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/bsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints"
+            android:baselineAligned="false"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp">
+
+            <LinearLayout
+                android:id="@+id/bsInfoLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:orientation="vertical"
+                tools:ignore="MissingConstraints">
+
+                <TextView
+                    android:id="@+id/baslik"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/baslik"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textColorHint="#757575">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/marka"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/marka"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#757575">
+                </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bsRouteLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:orientation="vertical"
+                android:layout_gravity="end"
+                tools:ignore="MissingConstraints">
+
+                <Button
+                    android:id="@+id/btnRoute"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_button"
+                    android:text="@string/route"
+                    android:textColor="#1976D2">
+                </Button>
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bsSoketLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bsLayout"
+            tools:ignore="MissingConstraints">
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
